@@ -1,2 +1,2 @@
-# 为什么选择 Type S c ri p t
+# 为什么选择 TypeScript
 
