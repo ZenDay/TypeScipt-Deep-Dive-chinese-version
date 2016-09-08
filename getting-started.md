@@ -1,7 +1,7 @@
 * [开始使用 TypeScript](#getting-started-with-typescript)
-* [TypeScript Version](#typescript-version)
+* [TypeScript 版本](#typescript-version)
 
-# 开始使用 TypeScript
+# 开始使用 TypeScript{#getting-started-with-typescript}
 
 TypeScript 会被编译成 JavaScript。JavaScipt 是你实际要执行的代码（在浏览器或者服务器上）。所以你需要下面的这些东西：
 
@@ -12,7 +12,7 @@ TypeScript 会被编译成 JavaScript。JavaScipt 是你实际要执行的代码
 ![](https://raw.githubusercontent.com/alm-tools/alm-tools.github.io/master/screens/main.png)
 
 
-## TypeScript 版本
+## TypeScript 版本{#typescript-version}
 
 不使用*固定版本*的 TypeScript 编译器，我们将在这本书里介绍很多新的特性，这些特性可能不会与某个版本号联系到一起。我通常推荐人们使用 nightly 版本，因为**编译器测试套件只会随着时间的推移发现更多的 bugs**。
 
