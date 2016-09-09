@@ -89,7 +89,7 @@ foo = '456';
 
 因此你可以增量更新你的 JavaScript 代码到 TypeScript。这跟其他语言编译器的工作机制有很大区别，也是另外一个使用 TypeScript 的原因。
 
-### Types can be ambient
+### 类型可以是环绕的
 TypeScript 的一个主要的设计目标就是让你能够安全而且轻松地在 TypeScript 中使用现存的 JavaScript 库。TypeScript 通过*定义*来做到这点。TypeScript 为你提供你想要在你的定义上花费功夫多少的递加，你花费得更多，你就能得到更多的类型安全和代码智能。注意，绝大多数流行的 JavaScript 库的定义已经被 [DefinitelyTyped 社区](https://github.com/borisyankov/DefinitelyTyped) 写好了，所以对于绝大多数的目标而言：
 
 1. 定义文件已经存在了。
