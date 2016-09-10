@@ -1,6 +1,6 @@
 #### `super`
 
-Note that if you call `super` on a child class it is redirected to the `prototype` as shown below:
+注意到如果你在子类中调用 `super` 它会像下面那样重定向 `prototype`：
 
 ```ts
 class Base {
@@ -11,7 +11,7 @@ class Child extends Base {
     log() { super.log() };
 }
 ```
-generates:
+生成：
 
 ```js
 var Base = (function () {
@@ -30,9 +30,9 @@ var Child = (function (_super) {
 })(Base);
 
 ```
-Notice `_super.prototype.log.call(this)`.
+留意 `_super.prototype.log.call(this)`。
 
-This means that you cannot use `super` on member properties. Instead you should just use `this`.
+这意味着你不能在成员属性上使用 `super` 。取而代之的是你应该使用 `this`。
 
 ```ts
 class Base {
@@ -44,9 +44,9 @@ class Child extends Base {
 }
 ```
 
-Notice since there is only one `this` shared between the `Base` and the `Child` class you need to use *different* names (here `log` and `logWorld`).
+注意因为只有一个 `this` 在 `Base` 和 `Child` 间共享，你需要使用*不同的*名字（这里是 `log` 和 `logWorld`）。
 
-Also Note that TypeScript will warn you if you try to misuse `super`:
+同样需要注意的是如果你尝试去错误使用 `super`，TypeScript 会警告你：
 
 ```ts
 module quz {

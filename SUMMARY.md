@@ -9,7 +9,7 @@
 * [未来 JavaScript：从现在开始](docs/future-javascript.md)
   * [类](docs/classes.md)
     * [类的发射](docs/classes-emit.md)
-    * [Classes Super](docs/classes-super.md)
+    * [类中的 Super](docs/classes-super.md)
     * [Classes Extensibility](docs/classes-extensibility-wip.md)
   * [Arrow Functions](docs/arrow-functions.md)
   * [Rest Parameters](docs/rest-parameters.md)
