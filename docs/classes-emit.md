@@ -1,5 +1,5 @@
-#### Whats up with the IIFE
-The js generated for the class could have been:
+#### IIFE 怎么了
+从类生成的 js 可以长这样：
 ```ts
 function Point(x, y) {
     this.x = x;
@@ -10,7 +10,7 @@ Point.prototype.add = function (point) {
 };
 ```
 
-The reason its wrapped in an Immediately-Invoked Function Expression (IIFE) i.e.
+它被包裹在立即执行函数表达式（IIFE），即：
 
 ```ts
 (function () {
@@ -21,7 +21,7 @@ The reason its wrapped in an Immediately-Invoked Function Expression (IIFE) i.e.
 })();
 ```
 
-has to do with inheritance. It allows TypeScript to capture the base class as a variable `_super` e.g.
+的原因是需要继承。这使得 TypeScript 通过变量 `_super` 获得基类。例如：
 
 ```ts
 var Point3D = (function (_super) {
@@ -38,10 +38,10 @@ var Point3D = (function (_super) {
 })(Point);
 ```
 
-Notice that the IIFE allows TypeScript to easily capture the base class `Point` in a `_super` variable and that is used consistently in the class body.
+需要注意的是 IIFE 允许 TypeScript 很容易地在 `_super` 变量中获得基类 `Point`，并且在类体中可以持续地使用。
 
 ### `__extends`
-You will notice that as soon as you inherit a class TypeScript also generates the following function:
+你会注意到在你继承一个类的时候，TypeScript 还声称了下面的函数：
 ```ts
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -50,57 +50,59 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 ```
-Here `d` refers to the derived class and `b` refers to the base class. This function does two things:
-1. copies the static members of the base class onto the child class i.e. `for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];`
-1. sets up the child class function's prototype to optionally lookup members on the parent's `proto` i.e. effectively `d.prototype.__proto__ = b.prototype`
+这里 `d` 引用了派生类而 `b` 引用了基类。这个函数做了两件事：
 
-People rarely have trouble understanding 1, but many people struggle with 2. so an explanation is in order
+1. 从基类中复制静态成员到子类，即 `for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];`
+2. 把子类函数的原型设置到父类的 `proto` 的可选查找成员，即高效地 `d.prototype.__proto__ = b.prototype`
+
+人们对于理解 1 很少会存在困难，但是很多人会陷于理解 2。因此一个解释是适当的。
 
 #### `d.prototype.__proto__ = b.prototype`
 
-After having tutored many people about this I find the following explanation to be simplest. First we will explain how the code from `__extends` is equivalent to the simple `d.prototype.__proto__ = b.prototype`, and then why this line in itself is significant. To understand all this you need to know these things:
-1. `__proto__`
-1. `prototype`
-1. effect of `new` on `this` inside the called function
-1. effect of `new` on `prototype` and `__proto__`
+在帮助了很多人理解这件事之后，我找到下面这种最简单的解释。首先我们会解释在 `__extends` 中的代码是怎么等价于 `d.prototype.__proto__ = b.prototype` 的，然后解释为什么这一行它自身是意义重大的。为了理解这点，你需要知道这几样东西：
 
-All objects in JavaScript contain a `__proto__` member. This member is often not accessible in older browsers (sometimes documentation refers to this magical property as `[[prototype]]`). It has one objective: If a property is not found on an object during lookup (e.g. `obj.property`) then it is looked up at `obj.__proto__.property`. If it is still not found then `obj.__proto__.__proto__.property` till either: *it is found* or *the latest `.__proto__` itself is null*. This explains why JavaScript is said to support *prototypal inheritance* out of the box. This is shown in the following example, which you can run in the chrome console or nodejs:
+1. `__proto__`
+2. `prototype`
+3. `new` 对于在被调用函数里 `this` 的作用
+4. `new` 对于`prototype` 和 `__proto__` 的作用
+
+JavaScript 中所有的对象都包含 `__proto__` 成员。这个成员在旧浏览器中是常常不可访问的（有的时候文档引用这个魔法属性为 `[[prototype]]`）它有一个目的：如果一个属性在查找时在一个对象上找不到（例如 `obj.property`）那么它会去查找 `obj.__proto__.property`。如果还是找不到那么去找 `obj.__proto__.__proto__.property` 直到两者之一被满足：*找到了*或者是*最后的`.__proto__`自身为 null*。这解释了为什么 JavaScript 表示支持自带的*原型继承*。下面的这个例子展示了这一点，你可以在 chrome 控制台或者 nodejs 中运行：
 
 ```ts
 var foo = {}
 
-// setup on foo as well as foo.__proto__
+// 在 foo 和 foo.__proto__ 中设置
 foo.bar = 123;
 foo.__proto__.bar = 456;
 
 console.log(foo.bar); // 123
-delete foo.bar; // remove from object
+delete foo.bar; // 从对象中删除
 console.log(foo.bar); // 456
-delete foo.__proto__.bar; // remove from foo.__proto__
+delete foo.__proto__.bar; // 从 foo.__proto__ 中删除
 console.log(foo.bar); // undefined
 ```
 
-Cool so you understand `__proto__`. Another useful information is that all `function`s in JavaScript have a property called `prototype` and that it has a member `constructor` pointing back to the function. This is shown below:
+这很酷，因此你现在理解了 `__proto__`。另外一个有用的信息是所有在 JavaScript 中的 `function` 有一个属性叫 `prototype`，而它有一个成员 `constructor` 反指向这个函数。下面是展示：
 
 ```ts
 function Foo() { }
-console.log(Foo.prototype); // {} i.e. it exists and is not undefined
-console.log(Foo.prototype.constructor === Foo); // Has a member called `constructor` pointing back to the function
+console.log(Foo.prototype); // {} 即它存在而且不是 undefined
+console.log(Foo.prototype.constructor === Foo); // 有一个成员叫做 `constructor` 指向这个函数
 ```
 
-Now lets look at *effect of `new` on `this` inside the called function*. Basically `this` inside the called function is going to point to the newly created object that will be returned from the function. It's simple to see if you mutate a property on `this` inside the function:
+现在让我们看看*`new` 对于在被调用函数里 `this` 的作用*。基本上被调用函数里的 `this` 会指向从函数中被返回的新创建的对象。如果你在函数中变化 this 上的一个属性，就很容易看得到这一点了：
 
 ```ts
 function Foo() {
     this.bar = 123;
 }
 
-// call with the new operator
+// 用 new 操作符调用
 var newFoo = new Foo();
 console.log(newFoo.bar); // 123
 ```
 
-Now the only other thing you need to know is that calling `new` on a function copies the `prototype` of the function into the `__proto__` of the newly created object that is returned from the function call. Here is code you can run to completely understand it:
+现在你唯一需要知道的就是在一个函数上调用 `new` 复制了函数的 `prototype` 到函数调用返回的新创建对象的 `__proto__` 上。这里是你可以运行来完全理解的代码：
 
 ```ts
 function Foo() { }
@@ -110,7 +112,7 @@ var foo = new Foo();
 console.log(foo.__proto__ === Foo.prototype); // True!
 ```
 
-That's it. Now look at the following straight out of `__extends`. I've take the liberty to number these lines:
+就是这样。现在在 `__extends` 之外直接地看下面的这些代码。我已经加入了行数编号：
 
 ```ts
 1  function __() { this.constructor = d; }
@@ -118,13 +120,13 @@ That's it. Now look at the following straight out of `__extends`. I've take the 
 3   d.prototype = new __();
 ```
 
-Reading this function in reverse the `d.prototype = new __()` on line 3 effectively means `d.prototype = {__proto__ : __.prototype}` (because of the effect of `new` on `prototype` and `__proto__`), combine it with the previous line (i.e. line 2 `__.prototype = b.prototype;`) you get `d.prototype = {__proto__ : b.prototype}`.
+反过来阅读这个函数，第三行 `d.prototype = new __()` 即是指 `d.prototype = {__proto__ : __.prototype}`（因为 `new` 对于`prototype` 和 `__proto__` 的作用），再看前一行（即第二行 `__.prototype = b.prototype;`）你就得到了`d.prototype = {__proto__ : b.prototype}`。
 
-But wait we wanted `d.prototype.__proto__` i.e. just the proto changed and maintain the old `d.prototype.constructor`. This is where the significance of the first line (i.e. `function __() { this.constructor = d; }`) comes in. Here we will effectively have `d.prototype = {__proto__ : __.prototype, d.constructor = d}` (because of the effect of `new` on `this` inside the called function). So since we restore `d.prototype.constructor`, the only thing we have truly mutated is the `__proto__` hence `d.prototype.__proto__ = b.prototype`.
+等一下，我们想要的是 `d.prototype.__proto__`，即只是 proto 改变和维持旧的  `d.prototype.constructor`。这就是第一行（即 `function __() { this.constructor = d; }`）的意义出现的地方了。这里我们会有 `d.prototype = {__proto__ : b.prototype, constructor: d}`（因为 `new` 对于在被调用函数里 `this` 的作用）。因此因为我们回复了 `d.prototype.constructor`，我们实际上唯一改变的东西就是 `__proto__` 于是 `d.prototype.__proto__ = b.prototype`。
 
-#### `d.prototype.__proto__ = b.prototype` significance
+#### `d.prototype.__proto__ = b.prototype` 的意义
 
-The significance is that it allows you to add member functions to a child class and inherit others from the base class. This is demonstrated by the following simple example:
+意义在于它允许你为子类添加成员函数以及从基类中继承其他。这通过下面的简单例子来演示：
 
 ```ts
 function Animal() { }
@@ -138,4 +140,4 @@ var bird = new Bird();
 bird.walk();
 bird.fly();
 ```
-Basically `bird.fly` will be looked up from `bird.__proto__.fly` (remember that `new` makes the `bird.__proto__` point to `Bird.prototype`) and `bird.walk` (an inherited member) will be looked up from `bird.__proto__.__proto__.walk` (as `bird.__proto__ == Bird.prototype` and `bird.__proto__.__proto__` == `Animal.prototype`).
+基本上 `bird.fly` 会从 `bird.__proto__.fly` 中查找（记得 `new` 使 `bird.__proto__` 指向 `Bird.prototype`）而 `bird.walk`（一个继承过来的成员）会从 `bird.__proto__.__proto__.walk` 中查找（因为 `bird.__proto__ == Bird.prototype` 和 `bird.__proto__.__proto__ == Animal.prototype`）

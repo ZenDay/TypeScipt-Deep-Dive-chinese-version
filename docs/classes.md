@@ -1,10 +1,12 @@
-### Classes
-The reason why it's important to have classes in JavaScript as a first class item is that:
-1. [Classes offer a useful structural abstraction](./tips/classesAreUseful.md)
-1. Provides a consistent way for developers to use classes instead of every framework (emberjs,reactjs etc) coming up with their own version.
-1. Object Oriented Developers already understand classes.
+### 类
+在 JavaScript 中类作为一等公民很重要的原因在于：
 
-Finally JavaScript developers can *have `class`*. Here we have a basic class called Point:
+1. [类提供了一个有用的结构化抽象](./tips/classesAreUseful.md)
+2. 提供了一个为开发者使用类的持续化方式而不是每一个框架（emberjs，reactjs 等等）都存在着自己的版本。
+3. 面向对象的开发者已经理解了类。
+
+最终 JavaScript 开发者可以*拥有 `class`*。这里我们有一个叫做 Point 的基本类：
+
 ```ts
 class Point {
     x: number;
@@ -22,7 +24,8 @@ var p1 = new Point(0, 10);
 var p2 = new Point(10, 20);
 var p3 = p1.add(p2); // {x:10,y:30}
 ```
-This class generates the following JavaScript on ES5 emit:
+这个类会在 ES5 中生成这样的 JavaScript 代码：
+
 ```ts
 var Point = (function () {
     function Point(x, y) {
@@ -35,10 +38,10 @@ var Point = (function () {
     return Point;
 })();
 ```
-This is a fairly idiomatic traditional JavaScript class pattern now as a first class language construct.
+现在作为一等语言构造，这是一个相当地道的传统 JavaScript 类模式了。
 
-### Inheritance
-Classes in TypeScript (like other languages) support *single* inheritance using the `extends` keyword as shown below:
+### 继承
+TypeScript 中的类（像其他语言那样）支持*单*继承，只要像下面这样使用 `extends` 关键字：
 
 ```ts
 class Point3D extends Point {
@@ -53,12 +56,12 @@ class Point3D extends Point {
     }
 }
 ```
-If you have a constructor in your class then you *must* call the parent constructor from your constructor (TypeScript will point this out to you). This ensures that the stuff that it needs to set on `this` gets set. Followed by the call to `super` you can add any additional stuff you want to do in your constructor (here we add another member `z`).
+如果你的类有构造函数，那么你*必须*在你的构造函数中调用父级构造函数（TypeScript 会为你指出这一点）。这保证了需要需要设置在 `this` 上的东西能够得到设置。在调用了 `super` 以后你可以添加任何而外的你想要在你的构造函数中做的东西（这里我们添加了额外的成员 `z`）。
 
-Note that you override parent member functions easily (here we override `add`) and still use the functionality of the super class in your members (using `super.` syntax).
+需要注意的是你可以轻易地重载父级成员函数（这里我们重载了 `add`）而在你的成员中仍然使用父类的功能（使用 `super.` 语法）。
 
-### Statics
-TypeScript classes support `static` properties that are shared by all instances of the class. A natural place to put (and access) them is on the class itself and that is what TypeScript does:
+### 静态
+TypeScript 的类支持 `static` 属性，这会被所有这个类的实例共享。一个自然的地方来放置（和访问）它们就是类本身，而 TypeScript 就是这么做的：
 
 ```ts
 class Something {
@@ -73,18 +76,18 @@ var s2 = new Something();
 console.log(Something.instances); // 2
 ```
 
-You can have static members as well as static functions.
+你可以拥有静态成员或者静态函数。
 
-### Access Modifiers
-TypeScript supports access modifiers `public`,`private` and `protected` which determine the accessibility of a `class` member as shown below:
+### 访问修饰符
+TypeScript 支持访问修饰符 `public`、`private` 和 `protected`，它们决定了一个 `class` 成员的可访问性，如下所示：
 
-| accessible on   | `public` | `private` | `protected` |
-|-----------------|----------|-----------|-------------|
-| class instances | yes      | no        | no          |
-| class           | yes      | yes       | yes         |
-| class children  | yes      | no        | yes         |
+| 可访问在 | `public` | `private` | `protected` |
+|---------|----------|-----------|-------------|
+| 类的实例 | 是		 | 否        | 否		       |
+| 类	   | 是		 | 是        | 是		       |
+| 类的孩子 | 是		 | 否        | 是		       |
 
-Note that at runtime (in the generated JS) these have no significance but will give you compile time errors if you use them incorrectly. An example of each is shown below:
+Note that at runtime (in the generated JS) these have no significance but will give you compile time errors if you use them incorrectly. An example of each is shown below:需要注意的是在运行时（在生成的 JS 里）这些是没有意义的，但是如果你不正确使用它们，会出现编译时错误。对于每种情况的
 
 ```ts
 class FooBase {
@@ -110,26 +113,26 @@ class FooChild extends FooBase {
 }
 ```
 
-As always these modifiers work for both member properties and member functions.
+跟之前一样，这些修饰符同时在成员属性和成员函数上有效。
 
-### Abstract
-`abstract` can be thought of as an access modifier. We present it separately because opposed to the previously mentioned modifiers it can be on a `class` as well as any member of the class. Having an `abstract` modifier primarily means that such functionality *cannot be directly invoked* and a child class must provide.
+### 抽象
+`abstract` 可以看成一个访问修饰符。我们把之所以它单独介绍，是因为跟之前提到的修饰符不同，它可以在 `class` 上也可以在类的成员上。拥有一个 `abstract` 修饰符主要意味着这个功能*不能直接被调用*而子类必须提供它。
 
-* `abstract` **classes** cannot be directly instantiated. Instead the user must create some `class` that inherit from the `abstract class`.
-* `abstract` **members** cannot be directly accessed and a child class must provide the functionality.
+* `abstract` 的**类**不能直接被实例化。用户必须创造一些 `class` 来继承`abstract class`。
+* `abstract` 的**成员**不能直接被访问，而且子类必须提供这个功能。
 
-### Constructor is optional
+### 构造函数是可选的
 
-The class does not need to have a constructor. e.g. the following is perfectly fine. 
+类不是必须要拥有一个构造函数。例如：
 
 ```ts
 class Foo {}
 let foo = new Foo();
 ```
 
-### Define using constructor
+### 使用构造函数来定义
 
-Having a member in a class and initializing it like below:
+在一个类中拥有一个成员并且像下面那样去初始化：
 
 ```ts
 class Foo {
@@ -139,7 +142,7 @@ class Foo {
     }
 }
 ```
-is such a common pattern that TypeScript provides a shorthand where you can prefix the member with an *access modifier* and it is automatically declared on the class and copied from the constructor. So the previous example can be re-written as (notice `public x:number`):
+是这样一种普遍的模式，因此 TypeScript 提供了一种缩写形式，你可以用一个*修饰符*作为作为成员的前缀然后它会在类中自动被声明和从构造函数中被复制。所以前面的例子可以被重写为（留意 `public x:number`）：
 
 ```ts
 class Foo {
@@ -148,8 +151,8 @@ class Foo {
 }
 ```
 
-### Property initializer
-This is a nifty feature supported by TypeScript (from ES7 actually). You can initialize any member of the class outside the class constructor, useful to provide default (notice `members = []`)
+### 属性初始化器
+这是由 TypeScript（实际上是从 ES7 ）提供的一个俏皮的特性。你可以在类的构造函数之外初始化任何类的成员，对于提供默认值（留意 `members = []`）很有用
 
 ```ts
 class Foo {
