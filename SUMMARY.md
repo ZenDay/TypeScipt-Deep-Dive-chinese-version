@@ -12,7 +12,7 @@
     * [类中的 Super](docs/classes-super.md)
     * [类的可扩展性](docs/classes-extensibility-wip.md)
   * [箭头函数](docs/arrow-functions.md)
-  * [Rest Parameters](docs/rest-parameters.md)
+  * [剩余参数](docs/rest-parameters.md)
   * [let](docs/let.md)
   * [const](docs/const.md)
   * [Destructuring](docs/destructuring.md)

@@ -45,7 +45,7 @@ setTimeout(person.growOld,1000);
 
 setTimeout(function() { console.log(person.age); },2000); // 2
 ```
-为什么这会有效的原因是 `this` 的引用被箭头函数从函数体外部捕获了。这等价于下面这段 JavaScript 代码（如果你没有 TypeScript 你也可以自己写）：
+这会有效的原因是 `this` 的引用被箭头函数从函数体外部捕获了。这等价于下面这段 JavaScript 代码（如果你没有 TypeScript 你也可以自己写）：
 
 ```ts
 function Person(age) {
