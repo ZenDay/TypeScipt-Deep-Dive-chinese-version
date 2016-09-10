@@ -41,7 +41,7 @@ var Point3D = (function (_super) {
 需要注意的是 IIFE 允许 TypeScript 很容易地在 `_super` 变量中获得基类 `Point`，并且在类体中可以持续地使用。
 
 ### `__extends`
-你会注意到在你继承一个类的时候，TypeScript 还声称了下面的函数：
+你会注意到在你继承一个类的时候，TypeScript 还声明了下面的函数：
 ```ts
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

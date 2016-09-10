@@ -10,7 +10,7 @@
   * [类](docs/classes.md)
     * [类的发射](docs/classes-emit.md)
     * [类中的 Super](docs/classes-super.md)
-    * [Classes Extensibility](docs/classes-extensibility-wip.md)
+    * [类的可扩展性](docs/classes-extensibility-wip.md)
   * [Arrow Functions](docs/arrow-functions.md)
   * [Rest Parameters](docs/rest-parameters.md)
   * [let](docs/let.md)
