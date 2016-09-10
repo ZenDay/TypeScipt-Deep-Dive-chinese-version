@@ -6,7 +6,7 @@
 * [JavaScript](docs/javascript/recap.md)
    * [糟粕](docs/javascript/awful.md)
    * [闭包](docs/javascript/closure.md)
-* [Future JavaScript Now](docs/future-javascript.md)
+* [未来 JavaScript：从现在开始](docs/future-javascript.md)
   * [Classes](docs/classes.md)
     * [Classes Emit](docs/classes-emit.md)
     * [Classes Super](docs/classes-super.md)

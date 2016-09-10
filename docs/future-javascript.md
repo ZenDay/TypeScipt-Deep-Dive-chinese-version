@@ -1,4 +1,4 @@
-# Future JavaScript: Now
-One of the main selling points of TypeScript is that it allows you to use a bunch of features from ES6 and beyond in current (ES3 and ES5 level) JavaScript engines (like current browsers and NodeJS). Here we deep dive into why these features are useful followed by how these features are implemented in TypeScript.
+# 未来 JavaScript：从现在开始
+TypeScript 的一个主要卖点就是它允许你使用 ES6 的一堆特性，超越于当前（ES3 和 ES5 等级）的 JavaScript 引擎（例如当前的浏览器和 NodeJS）。这里我们深潜到为什么这些特性很有用以及这些特性在 TypeScript 中如何被实现里去。
 
-Note: Not all of these features are slated for immediate addition to JavaScript but provide great utility to your code organization and maintenance. Also note that you are free to ignore any of the constructs that don't make sense for your project, although you will end up using most of them eventually ;)
+注意：不是所有这些特性都将立即加入到 JavaScript 中，而是为你的代码组织和维护提供了极大的效用。还需要注意的是你可以自由忽略任何对于你的项目来说没有意义的结构，尽管你最好中还是会使用其中的大部分 ;)
