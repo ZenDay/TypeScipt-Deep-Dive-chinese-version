@@ -1,60 +1,60 @@
-# JavaScript the awful parts
+# JavaScript 中的糟粕
 
-Here are some awful (misunderstood) parts of JavaScript that you must know.
+这里是一些你必须知道的 JavaScript 的糟糕的（引起误解的）部分。
 
-> Note: TypeScript is a superset of JavaScript. Just with documentation that can actually be used by compilers / IDEs ;)
+> 注意：TypeScript 是 JavaScript 的一个超集。 只是有了可以实际被编译器或者 IDEs 使用的文档。;)
 
-## Null and Undefined
+## Null 和 Undefined
 
-Fact is you will need to deal with both. Just check for either with `==` check.
+事实是你将需要都处理这两者。只要使用 `==` 来检查两者。
 
 ```ts
-/// Imagine you are doing `foo.bar == undefined` where bar can be one of:
+/// 想像一下你要做 `foo.bar == undefined` 而 bar 可能是下面其中之一：
 console.log(undefined == undefined); // true
 console.log(null == undefined); // true
 console.log(0 == undefined); // false
 console.log('' == undefined); // false
 console.log(false == undefined); // false
 ```
-Recommend `== null` to check for both `undefined` or `null`. You generally don't want to make a distinction between the two.
+推荐使用 `== null` 来检查 `undefined` 和 `null`。你通常不会想要区分这两者。
 
 ## undefined
 
-Remember how I said you should use `== null`. Of course you do (cause I just said it ^). Don't use it for root level things. In strict mode if you use `foo` and `foo` is undefined you get a `ReferenceError` **exception** and the whole call stack unwinds.
+还记得我说了你应该使用 `== null`。你当然记得啦（因为我刚刚才说过 ^）。别在根层次上使用它。在严格模式中如果你使用 `foo` 而 `foo` 是 undefined，你会得到一个 `ReferenceError` **错误** 以及整个调用堆栈的展开。
 
-> You should use strict mode ... and in fact the TS compiler will insert it for you if you use modules ... more on those later in the book so you don't have to be explicit about it :)
+> 你应该使用严格模式 ... 实际上如果你使用模块的话 TS 编译器会为你插入 ... 在这本书后面会介绍更多所以你不需要对此十分清晰 :)
 
-So to check if a variable is defined or not at a *global* level you normally use `typeof`:
+因此要检查一个*全局*层次的变量是否被定义，你通常使用 `typeof`：
 
 ```ts
 if (typeof someglobal !== 'undefined') {
-  // someglobal is now safe to use
+  // someglobal 现在可以安全地使用
   console.log(someglobal);
 }
 ```
 
 ## this
 
-Any access to `this` keyword within a function is actually controlled by how the function is actually called. It is commonly referred to as the `calling context`.
+任何在一个函数中对 `this` 的访问实际上由函数被调用的方式来控制。这通常被称为`调用上下文`。
 
-Here is an example:
+这是一个例子：
 
 ```ts
 function foo() {
   console.log(this);
 }
 
-foo(); // logs out the global e.g. `window` in browsers
+foo(); // 输出 global 变量。例如在浏览器中是 `window`
 let bar = {
   foo
 }
-bar.foo(); // Logs out `bar` as `foo` was called on `bar`
+bar.foo(); // 输出 `bar` 因为 `foo` 在 `bar` 上被调用
 ```
 
-So be mindful of your usage of `this`. If you want to disconnect `this` in a class from the calling context use an arrow function, [more on that later][arrow].
+所以要注意你对于 `this` 的使用。如果你想要在一个类中从调用上下文里断开 `this`，可以使用箭头函数，[之后会讲述更多][arrow]。
 
 [arrow]:../arrow-functions.md
 
-## Next
+## 接下来
 
-That's it. Those are the simple *misunderstood* portions of JavaScript that still result in various bugs for developers that are new to the language 🌹.
+就是这样。那些是 JavaScript 中引起误解的部分，它们仍然让这门语言的新手产生了很多的 bugs 🌹。
