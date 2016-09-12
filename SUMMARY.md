@@ -15,7 +15,7 @@
   * [剩余参数](docs/rest-parameters.md)
   * [let](docs/let.md)
   * [const](docs/const.md)
-  * [Destructuring](docs/destructuring.md)
+  * [解构](docs/destructuring.md)
   * [for...of](docs/for...of.md)
   * [Iterators](docs/iterators.md)
   * [Template Strings](docs/template-strings.md)

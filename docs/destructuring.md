@@ -1,11 +1,11 @@
-### Destructuring
+### 解构
 
-TypeScript supports the following forms of Destructuring (literally named after de-structuring i.e. breaking up the structure):
+TypeScript 支持下面这几种形式的解构（字面上地因为解开结构而得名结构）：
 
-1. Object Destructuring
-1. Array Destructuring
+1. 对象解构
+2. 数组解构
 
-It is easy to think of destructuring as an inverse of *structuring*. The method of *structuring* in JavaScript is the object literal:
+很容易就能想到解构是*结构*的反转操作。在 JavaScript 中*结构*的方法是对象字面量：
 
 ```ts
 var foo = {
@@ -14,72 +14,73 @@ var foo = {
     }
 };
 ```
-Without the awesome *structuring* support built into JavaScript creating new objects on the fly would indeed be very cumbersome. Destructuring brings the same level of convenience to getting data out of a structure.
+没有了绝妙的*结构*支持，在 JavaScript 中创建新对象确实会变得非常笨重。解构带来了从结构中提取数据的相同层次的便捷性。
 
-#### Object Destructuring
-Destructuring is useful because it allows you to do in a single line, what would otherwise require multiple lines. Consider the following case:
+#### 对象解构
+解构很有用，因为它允许你在一行内实现，而其他方法则需要多行。考虑下面这个例子：
 
 ```ts
 var rect = { x: 0, y: 10, width: 15, height: 20 };
 
-// Destructuring assignment
+// 解构赋值
 var {x, y, width, height} = rect;
 console.log(x, y, width, height); // 0,10,15,20
 ```
-Here in the absence of destructuring you would have to pick off `x,y,width,height` one by one from `rect`.
+没有解构，你将必须一个接着一个地从 `rect` 里把 `x,y,width,height` 拿出来。
 
-To assign an extracted variable to a new variable name you can do the following:
+想要把一个提取出来的变量赋值到一个新的变量名，你可以像下面这样做：
 
 ```ts
-// structure
+// 结构
 const obj = {"some property": "some value"};
 
-// destructure
+// 解构
 const {"some property": someProperty} = obj;
 console.log(someProperty === "some value"); // true
 ```
 
-Additionally you can get *deep* data out of a structure using destructuring. This is shown in the following example:
+另外你可以使用解构来获取解构中的*深层*数据。如下所示：
 
 ```ts
 var foo = { bar: { bas: 123 } };
-var {bar: {bas}} = foo; // Effectively `var bas = foo.bar.bas;`
+var {bar: {bas}} = foo; // 简化的 `var bas = foo.bar.bas;`
 ```
 
-#### Array Destructuring
-A common programming question : Swap two variables without using a third one. The TypeScript solution:
+#### 数组解构
+一个普通的编程问题：不使用第三个变量来交换两个变量。TypeScript 的解决方案：
 
 ```ts
 var x = 1, y = 2;
 [x, y] = [y, x];
 console.log(x, y); // 2,1
 ```
-Note that array destructuring is effectively the compiler doing the `[0], [1], ...` and so on for you. There is no guarantee that these values will exist.
+需要注意的是数组解构即编译器有效地为你做了 `[0], [1], ...` 等等。不能保证这些值一定存在。
 
-#### Array Destructuring with rest
-You can pick up any number of elements from the array and get *an array* of the remaining elements using array destructuring with rest.
+#### 数组解构剩余
+你可以从数组中拿出任意数量的元素然后获得*一个数组*，它包含了被解构数组剩余的所有元素。
 
 ```ts
 var [x, y, ...remaining] = [1, 2, 3, 4];
 console.log(x, y, remaining); // 1, 2, [3,4]
 ```
 
-#### Array Destructuring with ignores
-You can ignore any index by simply leaving its location empty i.e. `, ,` in the left hand side of the assignment. For example:
+#### 数组解构忽略
+你可以简单地通过让它的位置为空来忽略任意位置，即在赋值操作左侧的 `, ,`。例如：
+
 ```ts
 var [x, , ...remaining] = [1, 2, 3, 4];
 console.log(x, remaining); // 1, [3,4]
 ```
 
-#### JS Generation
-The JavaScript generation for non ES6 targets simply involves creating temporary variables, just like you would have to do yourself without native language support for destructuring e.g.
+#### JS 生成
+对于非 ES6 目标生成的 JavaScript 简单地涉及到创建临时变量，就像没有原生语言支持的解构时你不得不做的那样：
 
 ```ts
 var x = 1, y = 2;
 [x, y] = [y, x];
 console.log(x, y); // 2,1
 
-// becomes //
+// 变成 //
 
 var x = 1, y = 2;
 _a = [y,x], x = _a[0], y = _a[1];
@@ -87,5 +88,5 @@ console.log(x, y);
 var _a;
 ```
 
-#### Summary
-Destructuring can make your code more readable and maintainable by reducing the line count and making the intent clear. Array destructuring can allow you to use arrays as though they were tuples.
+#### 总结
+解构通过减少行数和明确意图来使你的代码更加可读和可维护。数组解构能够允许你像元组那样使用数组。
