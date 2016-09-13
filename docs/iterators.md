@@ -1,8 +1,6 @@
-### Iterators
+### 迭代器
 
-Iterator itself is not a TypeScript or ES6 feature, Iterator is a
-Behavioral Design Pattern common for Object oriented programming languages.
-It is, generally, an object which implements the following interface:
+迭代器本身不是一个 TypeScript 或者 ES6 特性，它是一个面向对象编程语言中的一个普遍的行为设计模式。它通常就是，一个实现了下面接口的对象：
 
 ```ts
 interface Iterator<T> {
@@ -12,12 +10,9 @@ interface Iterator<T> {
 }
 ```
 
-This interface allows to retrieve a value from some collection or sequence
-which belongs to the object.
+这个接口允许去从属于对象的一些集合或者队列中获取值。
 
-Imagine that there's an object of some frame, which includes the list of
-components of which this frame consists. With Iterator interface it is possible
-to retrieve components from this frame object like below:
+想象一下有一个一些帧的对象，包括了这个帧包含的组件列表。使用迭代器接口可以像下面这样从帧对象中取出组件：
 
 ```ts
 'use strict';
@@ -54,16 +49,13 @@ let iteratorResult3 = frame.next(); //{ done: false, value: Component { name: 'l
 let iteratorResult4 = frame.next(); //{ done: false, value: Component { name: 'right' } }
 let iteratorResult5 = frame.next(); //{ done: true }
 
-//It is possible to access the value of iterator result via the value property:
+//可以通过 value 属性来访问迭代器结果的值：
 let component = iteratorResult1.value; //Component { name: 'top' }
 ```
-Again. Iterator itself is not a TypeScript feature, this code could work without
-implementing Iterator and IteratorResult interfaces explicitly.
-However it is very helpful to use these common
-ES6 [interfaces](./types/ambient/interfaces.md) for code consistency.
+再次强调，迭代器本身不是 TypeScript 特性，这些代码在没有实际实现 Iterator 和 IteratorResult 接口的情况下是无效的。然而使用这些普遍的 ES6 [接口](./types/ambient/interfaces.md)对于代码一致性来说很有用。
 
-Ok, Nice, but could be more helpful. ES6 defines the *iterable protocol*
-which includes [Symbol.iterator] `symbol` if Iterable interface implemented:
+Ok，非常好，但是可以更有用。ES6 定义了*迭代协议*，其中包括了 [Symbol.iterator] `symbol`，如果 Iterable 接口已经实现的话：
+
 ```ts
 //...
 class Frame implements Iterable<Component> {
@@ -102,8 +94,8 @@ for (let cmp of frame) {
 }
 ```
 
-Unfortunately `frame.next()` won't work with this pattern and it also looks
-a bit clunky. IterableIterator interface to the rescue!
+不幸运的是，`frame.next()` 在这种模式里没有作用，而且它看起来有些笨重。使用 IterableIterator 来补救！
+
 ```ts
 //...
 class Frame implements IterableIterator<Component> {
@@ -132,10 +124,10 @@ class Frame implements IterableIterator<Component> {
 }
 //...
 ```
-Both `frame.next()` and `for` cycle now work fine with IterableIterator interface.
+通过 IterableIterator  接口，`frame.next()` 和 `for` 循环现在可以很好地起作用了。
 
-Iterator does not have to iterate a finite value.
-The typical example is a Fibonacci sequence:
+迭代器不止可以迭代有限的值。典型的例子是斐波那契数列：
+
 ```ts
 class Fib implements IterableIterator<number> {
 
@@ -179,13 +171,9 @@ console.log(Array.from(fibMax50)); // [ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 ]
 
 let fibMax21 = new Fib(21);
 for(let num of fibMax21) {
-  console.log(num); //Prints fibonacci sequence 0 to 21
+  console.log(num); //输出从 0 到 21 的斐波那契数列
 }
 ```
 
-#### Building code with iterators for ES5 target
-Code examples above require ES6 target, however it could work
-with ES5 target as well if target JS engine supports `Symbol.iterator`.
-This can be achieved by using ES6 lib with ES5 target
-(add es6.d.ts to your project) to make it compile.
-Compiled code should work in node 4+, Google Chrome and in some other browsers.
+#### 为 ES5 目标使用迭代器构件代码
+上面的代码例子要求 ES6 为目标，然而它在 ES5 目标下也可以工作，如果目标 JS 引擎支持 `Symbol.iterator` 的话。这可以通过在 ES5 目标上使用 ES6 库（添加 es6.d.ts 到你的项目中）来使其编译。编译后的代码应该在 node 4+，Google Chrome 和一些其他引擎里有效。

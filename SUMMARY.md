@@ -17,7 +17,7 @@
   * [const](docs/const.md)
   * [解构](docs/destructuring.md)
   * [for...of](docs/for...of.md)
-  * [Iterators](docs/iterators.md)
+  * [迭代器](docs/iterators.md)
   * [Template Strings](docs/template-strings.md)
   * [Spread Operator](docs/spread-operator.md)
   * [Enums](docs/enums.md)
