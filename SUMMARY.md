@@ -19,7 +19,7 @@
   * [for...of](docs/for...of.md)
   * [迭代器](docs/iterators.md)
   * [模版字符串](docs/template-strings.md)
-  * [Spread Operator](docs/spread-operator.md)
+  * [展开运算符](docs/spread-operator.md)
   * [Enums](docs/enums.md)
   * [Promise](docs/promise.md)
   * [Generators](docs/generators.md)

@@ -1,9 +1,9 @@
-### Spread Operator
+### 展开运算符
 
-The main objective of the spread operator is to *spread* the objects of an array. This is best explained with examples.
+展开运算符的主要目标是去展开一个数组的对象。这最好通过例子来解释。
 
 #### Apply
-A common use case is to spread an array into the function arguments. Previously you would need to use `Function.prototype.apply`:
+展开数组到函数参数是一个普遍用例。之前你必须要使用 `Function.prototype.apply`：
 
 ```ts
 function foo(x, y, z) { }
@@ -11,7 +11,7 @@ var args = [0, 1, 2];
 foo.apply(null, args);
 ```
 
-Now you can do this simply by prefixing the arguments with `...` as shown below:
+现在你可以像下面那样通过简单地在参数前缀加上 `...` 来实现：
 
 ```ts
 function foo(x, y, z) { }
@@ -19,19 +19,19 @@ var args = [0, 1, 2];
 foo(...args);
 ```
 
-Here we are *spreading* the `args` array into positional `arguments`.
+这里我们把 `args` 数组展开到位置上的 `arguments` 中。
 
-#### Destructuring
-We've already seen one usage of this in *destructuring*
+#### 解构
+我们已经在*解构*里看过这种用法了
 
 ```ts
 var [x, y, ...remaining] = [1, 2, 3, 4];
 console.log(x, y, remaining); // 1, 2, [3,4]
 ```
-The motivation here is to simply make it easy for you to capture the remaining elements of an array when destructuring.
+这里的目标是简单地使你能在解构时轻易地获取到其余元素。
 
-#### Array Assignment
-The spread operator allows you to easily place an *expanded version* of an array into another array. This is demonstrated in the example below:
+#### 数组赋值
+展开操作符使你可以简单的把一个数组的*展开版本*放到另一个数组中。如下所示：
 
 ```ts
 var list = [1, 2];
@@ -39,8 +39,8 @@ list = [...list, 3, 4];
 console.log(list); // [1,2,3,4]
 ```
 
-#### Summary
-`apply` is something that you would inevitably do in JavaScript, so it's good to have a better syntax where you don't have that ugly `null` for the `this` argument. Also having a dedicated syntax for moving arrays out of (destructuring) or into (assignment) other arrays provides neat syntax for when you are doing array processing on partial arrays.
+#### 总结
+`apply` 是 JavaScript 中你必将会做的东西，所以有更好的语法使你不需要为 `this` 参数填入丑陋的 `null` 是一件极好的事。而且有用于移出（解构）或者移入（赋值）一个数组到另一个数组的专用语法使你在局部数组里处理数组时更整洁。
 
 
 [](https://github.com/Microsoft/TypeScript/pull/1931)
