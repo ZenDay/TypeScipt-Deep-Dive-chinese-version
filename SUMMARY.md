@@ -18,7 +18,7 @@
   * [解构](docs/destructuring.md)
   * [for...of](docs/for...of.md)
   * [迭代器](docs/iterators.md)
-  * [Template Strings](docs/template-strings.md)
+  * [模版字符串](docs/template-strings.md)
   * [Spread Operator](docs/spread-operator.md)
   * [Enums](docs/enums.md)
   * [Promise](docs/promise.md)
