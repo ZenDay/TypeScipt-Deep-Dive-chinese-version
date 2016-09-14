@@ -1,14 +1,14 @@
-* [Enums](#enums)
-* [Enums and numbers](#enums-and-numbers)
-* [Enums and strings](#enums-and-strings)
-* [Changing the number associated with an enum](#changing-the-number-associated-with-an-enum)
-* [Enums are open ended](#enums-are-open-ended)
-* [Enums as flags](#enums-as-flags)
-* [Const enums](#const-enums)
-* [Enum with static functions](#enum-with-static-functions)
+* [枚举](#enums)
+* [枚举和数值](#enums-and-numbers)
+* [枚举和字符串](#enums-and-strings)
+* [改变数值和枚举的关联](#changing-the-number-associated-with-an-enum)
+* [枚举是开放的](#enums-are-open-ended)
+* [作为标识的枚举](#enums-as-flags)
+* [常量枚举](#const-enums)
+* [枚举静态函数](#enum-with-static-functions)
 
-### Enums
-An enum is a way to organize a collection of related values. Many other programming languages (C/C#/Java) have an `enum` data type but JavaScript does not. However TypeScript does. Here is an example definition of a TypeScript enum:
+### 枚举{#enums}
+枚举是一种组织相关值集合的方法。很多其他编程语言（C/C#/Java）都有 `enum` 数据类型，但是 JavaScript 没有。然而 TypeScript 是有的。这是一个 TypeScript 枚举的示例定义：
 
 ```ts
 enum CardSuit {
@@ -18,15 +18,15 @@ enum CardSuit {
 	Spades
 }
 
-// Sample usage
+// 示例用法
 var card = CardSuit.Clubs;
 
-// Safety
+// 安全
 card = "not a member of card suit"; // Error : string is not assignable to type `CardSuit`
 ```
 
-#### Enums and Numbers
-TypeScript enums are number based. This means that numbers can be assigned to an instance of the enum, and so can anything else that is compatible with `number`.
+#### 枚举和数值{#enums-and-numbers}
+TypeScript 是基于数值的。这意味着数值可以被赋值到一个枚举的实例，而因此其他东西也可以兼容 `number`。
 
 ```ts
 enum Color {
@@ -35,11 +35,11 @@ enum Color {
     Blue
 }
 var col = Color.Red;
-col = 0; // Effectively same as Color.Red
+col = 0; // 跟 Color.Red 一致
 ```
 
-#### Enums and Strings
-Before we look further into enums lets look at the JavaScript that it generates, here is a sample TypeScript:
+#### 枚举和字符串{#enums-and-strings}
+:在我们深入了解枚举之前，让我们先看看它生成的 JavaScript，这里是示例的 TypeScript：
 
 ```ts
 enum Tristate {
@@ -48,7 +48,7 @@ enum Tristate {
     Unknown
 }
 ```
-generates the following JavaScript
+生成下面的 JavaScript
 
 ```js
 var Tristate;
@@ -59,7 +59,7 @@ var Tristate;
 })(Tristate || (Tristate = {}));
 ```
 
-lets focus on the line `Tristate[Tristate["False"] = 0] = "False";`. Within it `Tristate["False"] = 0` should be self explanatory, i.e. sets `"False"` member of `Tristate` variable to be `"0"`. Note that in JavaScript the assignment operator returns the assigned value (in this case `0`). Therefore the next thing executed by the JavaScript runtime is `Tristate[0] = "False"`. This means that you can use the `Tristate` variable to convert a string version of the enum to a number or a number version of the enum to a string. This is demonstrated below:
+让我们关注这行 `Tristate[Tristate["False"] = 0] = "False";`。 其中`Tristate["False"] = 0` 应该自我解释，即设置 `Tristate` 变量的 `"False"` 成员为 `"0"`。需要注意的是 JavaScript 里赋值操作返回的是被赋的值（在这个例子中是 `0`）。因而被 JavaScript 运行时执行的下一个东西是 `Tristate[0] = "False"`。这意味着你可以使用 `Tristate` 变量来从枚举的字符串版本转换到一个数字或者从数字版本到字符串。如下所示：
 
 ```ts
 enum Tristate {
@@ -69,11 +69,12 @@ enum Tristate {
 }
 console.log(Tristate[0]); // "False"
 console.log(Tristate["False"]); // 0
-console.log(Tristate[Tristate.False]); // "False" because `Tristate.False == 0`
+console.log(Tristate[Tristate.False]); // "False" 因为 `Tristate.False == 0`
 ```
 
-#### Changing the number associated with an Enum
-By default enums are `0` based and then each subsequent value increments by 1 automatically. As an example consider the following
+#### 改变数值和枚举的关联{#changing-the-number-associated-with-an-enum}
+默认枚举是基于 `0` 的，每一个随后的值自动加 1。如下所示：
+
 ```ts
 enum Color {
     Red,     // 0
@@ -81,7 +82,8 @@ enum Color {
     Blue     // 2
 }
 ```
-However you can change the number associated with any enum member by assigning to it specifically. This is demonstrated below where we start at 3 and start incrementing from there:
+然而你可以通过特定赋值改变数值和任何枚举成员的关联。下面展示的是我们从 3 开始自动增加：
+
 ```
 enum Color {
     DarkRed = 3,  // 3
@@ -90,10 +92,10 @@ enum Color {
 }
 ```
 
-> TIP: I quite commonly initialize the first enum with ` = 1` as it allows me to do a safe truthy check on an enum value.
+> 提示：我通常初始化第一个枚举为 ` = 1` 以对于枚举值做安全可信检查。
 
-#### Enums are open ended
-Here is the generated JavaScript for an enum shown again:
+#### 枚举是开放的{#enums-are-open-ended}
+再次展示枚举生成的 JavaScript：
 
 ```js
 var Tristate;
@@ -104,9 +106,9 @@ var Tristate;
 })(Tristate || (Tristate = {}));
 ```
 
-We already explained the `Tristate[Tristate["False"] = 0] = "False";` portion. Now notice the surrounding code `(function (Tristate) { /*code here */ })(Tristate || (Tristate = {}));` specifically the `(Tristate || (Tristate = {}));` portion. This basically captures a local variable `TriState` that will either point to an already defined `Tristate` value or initialize it with a new empty `{}` object.
+我们已经解释了 `Tristate[Tristate["False"] = 0] = "False";` 的部分。现在来关注下周边代码 `(function (Tristate) { /*code here */ })(Tristate || (Tristate = {}));` 尤其是 `(Tristate || (Tristate = {}));` 这块。这本质上捕获了一个本地变量 `TriState`，它可能指向一个已经定义好的 `Tristate` 值或者初始化为一个新的空 `{}` 对象。
 
-This means that you can split (and extend) an enum definition across multiple files. For example below we have split the definition for `Color` into two blocks
+这意味着你可以跨多文件分裂（和扩展）一个枚举定义。例如下面的例子中我们把 `Color` 的定义分成了两块：
 
 ```ts
 enum Color {
@@ -122,10 +124,10 @@ enum Color {
 }
 ```
 
-Note that you *should* reinitialize the first member (here `DarkRed = 3`) in a continuation of an enum to get the generated code not clobber values from a previous definition (i.e. the `0`, `1`, ... so on values). TypeScript will warn you if you don't anyways (error message `In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.`)
+需要注意的是你*应该*重初始化第一个成员（这里是 `DarkRed = 3`）在一个枚举的延续中来使生成的代码不跟之前的定义（即 `0`、`1`、...等值）冲突。如果你不总是这样做的话，TypeScript 会警告你（错误信息 `In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.`）。
 
-#### Enums as flags
-One excellent use of the ability to use enums as `Flags`. Flags allow you to check if a certain condition from a set of conditions is true. Consider the following example where we have a set of properties about animals:
+#### 作为标识的枚举{#enums-as-flags}
+一个卓越的用法是把枚举用作 `Flags`。标识允许你检查在一系列条件中的一个特定条件是否为真。考虑在下面的例子中我们有关于动物的一系列属性：
 
 ```ts
 enum AnimalFlags {
@@ -136,7 +138,7 @@ enum AnimalFlags {
     Endangered     = 1 << 3
 }
 ```
-Here we are using the left shift operator to move `1` around a certain level of bits to come up with bitwise disjoint numbers `0001`, `0010`, `0100` and `1000` (these are decimals `1`,`2`,`4`,`8` if you are curious). The bitwise operators `|` (or) / `&` (and) / `~` (not) are your best friend when working with flags and are demonstrated below:
+这里我们使用左移操作符来在一个特定位层次里移动 `1` 来获得按位不相交的数字 `0001`、`0010`、`0100` 和 `1000`（如果你好奇的话，十进制里是 `1`、`2`、`4`、`8`）。如下所示，按位操作符 `|`（或）/ `&`（与）/ `~`（非）是你在跟标识一起工作的时候的最好朋友：
 
 ```ts
 
@@ -169,12 +171,13 @@ animal.flags |= AnimalFlags.HasClaws | AnimalFlags.CanFly;
 printAnimalAbilities(animal); // animal has claws, animal can fly
 ```
 
-Here:
-* we used `|=` to add flags
-* a combination of `&=` and `~` to clear a flag
-* `|` to combine flags
+这里：
 
-Note : you can combine flags to create convenient shortcuts within the enum definition e.g. `EndangeredFlyingClawedFishEating` below.
+* 我们使用了 `|=` 来添加标识
+* `&=` 和 `~` 的组合来清除标识
+* `|` 来合并标识
+
+注意：你可以在枚举定义中通过合并标识来创建方便的缩写，例如下面的 `EndangeredFlyingClawedFishEating`。
 
 ```ts
 enum AnimalFlags {
@@ -188,9 +191,9 @@ enum AnimalFlags {
 }
 ```
 
-#### Const Enums
+#### 常量枚举{#const-enums}
 
-If you have an enum definition like the following:
+假设你有类似于下面的枚举定义：
 
 ```ts
 enum Tristate {
@@ -201,7 +204,7 @@ enum Tristate {
 
 var lie = Tristate.False;
 ```
-the line `var lie = Tristate.False` is compiled to the JavaScript `var lie = Tristate.False` (yes output is same as input). This means that at execution the runtime will need to lookup `Tristate` and then `Tristate.False`. To get a performance boost here you can mark the `enum` as a `const enum`. This is demonstrated below:
+`var lie = Tristate.False` 行会被编译成 JavaScript `var lie = Tristate.False`（对的，输入和输出一样）。这意味着执行的时候，运行时会寻找 `Tristate` 以及 `Tristate.False`。为了提升性能，这里你可以把 `enum` 标记为 `const enum`。 如下所示
 
 ```ts
 const enum Tristate {
@@ -212,20 +215,22 @@ const enum Tristate {
 
 var lie = Tristate.False;
 ```
-generates the JavaScript:
+
+生成的 JavaScript：
 ```js
 var lie = 0;
 ```
 
-i.e. the compiler :
-1. *inlines* any usages of the enum (`0` instead of `Tristate.False`).
-1. does not generate any JavaScript for the enum definition (there is no `Tristate` variable at runtime) as its usages are inlined.
+即编译器：
 
-##### Const enum preserveConstEnums
-Inlining has obvious performance benefits. The fact that there is no `Tristate` variable at runtime is simply the compiler helping you out by not generating JavaScript that is not actually used at runtime. However you might want the compiler to still generate the JavaScript version of the enum definition for stuff like *number to string* or *string to number* lookups as we saw. In this case you can use the compiler flag `--preserveConstEnums` and it will still generate the `var Tristate` definition so that you can use `Tristate["False"]` or `Tristate[0]` manually at runtime if you want. This does not impact *inlining* in any way.
+1. *内联*了枚举的任何使用（`0` 替代了 `Tristate.False`）。
+2. 因为使用被内联了，没有为枚举定义生成任何 JavaScript（在运行时没有 `Tristate` 变量）。
 
-### Enum with static functions
-You can use the declaration `enum` + `namespace` merging to add static methods to an enum. The following demonstrates an example where we add a static member `isBusinessDay` to an enum `Weekday`
+##### 常量枚举 preserveConstEnums
+内联有着显而易见的性能益处。没有 `Tristate` 在运行时的事实是编译器帮助你不生成不在运行时实际运行的 JavaScript。然而你可能想要编译器仍然生成枚举定义的 JavaScript 版本，为了像是*数值转字符串*或者*字符串转数值*的东西。在这种场景下你可以使用编译器标识 `--preserveConstEnums`，而它会仍然生成 `var Tristate` 定义因此你可以在运行时手动使用 `Tristate["False"]` 或者 `Tristate[0]`，如果你想的话。这在任何情况下都不会影响内联。
+
+### 枚举静态函数{#enum-with-static-functions}
+你可以使用声明 `enum` + `namespace` 合起来给枚举添加静态函数。下面展示的例子中我们添加了一个静态成员 `isBusinessDay` 到枚举 `Weekday` 中：
 
 ```ts
 enum Weekday {

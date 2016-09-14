@@ -20,7 +20,7 @@
   * [迭代器](docs/iterators.md)
   * [模版字符串](docs/template-strings.md)
   * [展开运算符](docs/spread-operator.md)
-  * [Enums](docs/enums.md)
+  * [枚举](docs/enums.md)
   * [Promise](docs/promise.md)
   * [Generators](docs/generators.md)
   * [Async Await](docs/async-await.md)
