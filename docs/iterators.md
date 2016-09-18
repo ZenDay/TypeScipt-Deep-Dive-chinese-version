@@ -52,7 +52,7 @@ let iteratorResult5 = frame.next(); //{ done: true }
 //可以通过 value 属性来访问迭代器结果的值：
 let component = iteratorResult1.value; //Component { name: 'top' }
 ```
-再次强调，迭代器本身不是 TypeScript 特性，这些代码在没有实际实现 Iterator 和 IteratorResult 接口的情况下是无效的。然而使用这些普遍的 ES6 [接口](./types/ambient/interfaces.md)对于代码一致性来说很有用。
+再次强调，迭代器本身不是 TypeScript 特性，这些代码在没有实际实现 Iterator 和 IteratorResult 接口的情况下是无效的。然而使用这些普遍的 ES6 [接口](./types/interfaces.md)对于代码一致性来说很有用。
 
 Ok，非常好，但是可以更有用。ES6 定义了*迭代协议*，其中包括了 [Symbol.iterator] `symbol`，如果 Iterable 接口已经实现的话：
 
