@@ -1,6 +1,6 @@
 ## Generators
 
-> 注意：你不能在 TypeScript 中以有意义的方式使用 generators（ES5 的转换器正在进行中）。然而这会很快地改变，所以我们仍然有这一章。
+> 注意：你不能在 TypeScript 中以有意义的方式使用 generators（ES5 的转换器正在进行中）。然而这将会很快改变，所以我们仍然有这一章。
 
 `function *` 是用来创建 *generator 函数*的语法。调用一个 generator 函数返回的是一个 *generator 对象*。Generator 函数有两个主要动机。Generator 对象遵循 [迭代器][iterator] 接口（即 `next`，`return` 和 `throw` 函数）。
 

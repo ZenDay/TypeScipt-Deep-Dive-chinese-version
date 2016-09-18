@@ -1,11 +1,11 @@
 ## Async Await
 
-> NOTE: You cannot use async await in TypeScript in a meaningful way (the ES5 emitter is in progress). However that will change soon so we still have this chapter.
+> 注意：你不能在 TypeScript 中以有意义的方式使用 async await（ES5 的转换器正在进行中）。然而这将会很快改变，所以我们仍然有这一章。
 
-As a thought experiment imagine the following, a way to tell the JavaScript runtime to pause the executing of code on the `await` keyword when used on a promise and resume *only* once (and if) the promise returned from the function is settled.
+作为一个思想实验，想像下面这段代码，这是一种方式去告诉 JavaScript 运行时在使用于 promise 上的 `await` 关键字上暂停执行代码，然后仅当（和如果）promise 从函数中返回时恢复执行。
 
 ```ts
-// Not actual code. A thought experiment
+// 非真实代码，一个思想实验
 async function foo() {
     try {
         var val = await getMeAPromise();
@@ -17,21 +17,22 @@ async function foo() {
 }
 ```
 
-When the promise settles execution continues,
-* if it was fulfilled then await will return the value,
-* if it's rejected an error will be thrown synchronously which we can catch.
+当 promise 稳定后执行继续，
 
-This suddenly (and magically) makes asynchronous programming as easy as synchronous programming.  Three things are needed for this though experiment are.
+* 如果它是 fulfilled，那么 await 会返回值，
+* 如果它 reject 了一个错误，那么错误会被同步地抛出使我们可以捕获。
 
-* Ability to *pause function* execution.
-* Ability to *put a value inside* the function.
-* Ability to *throw an exception inside* the function.
+这突然（而且神奇地）令异步编程跟同步编程一样容易。这个思想实验需要三样东西：
 
-This is exactly what generators allowed us to do! The thought experiment *is actually real* and is the `async`/`await` implementation in TypeScript / JavaScript. Under the covers it just uses generators.
+* *暂停函数*执行的能力。
+* *把值放入*函数中的能力。
+* *把错误抛到*函数中的能力。
 
-### Generated JavaScript
+这正是 generators 帮我们做到的事！这个思想实验*实际上是真实的*，而且就是 TypeScript / JavaScript 中 `async`/`await` 的实现。背后它实际上只使用了 generators。
 
-You don't have to understand this, but its fairly simple if you've [read up on generators][generators]. The function `foo` can be simply wrapped up as follows:
+### 生成的 JavaScript
+
+你不需要去理解它，但如果你已经读了 [generators][generators]，就相当简单了。函数 `foo` 可以简单地被包裹为：
 
 ```ts
 const foo = wrapToReturnPromise(function* () {
@@ -45,6 +46,6 @@ const foo = wrapToReturnPromise(function* () {
 })
 ```
 
-where the `wrapToReturnPromise` just executes the generator function to get the `generator` and then use `generator.next()`, if the value is a `promise` it would `then`+`catch` the promise and depending upon the result call `genertor.next(result)` or `genertor.throw(error)`. That's it!
+`wrapToReturnPromise` 只是执行了 generator 函数来获得 `generator` 然后使用 `generator.next()`，如果值是一个 `promise`，它会 `then`+`catch` 这个 promise，以及取决于结果来调用 `genertor.next(result)` 或者 `genertor.throw(error)`。就是这样！
 
 [generators]:./generators.md
