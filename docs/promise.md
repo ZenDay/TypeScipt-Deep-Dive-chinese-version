@@ -1,10 +1,10 @@
 ## Promise
 
-The `Promise` class is something that exists in many modern JavaScript engines and can be easily [polyfilled][polyfill]. The main motivation for promises is to bring synchronous style error handling to Async / Callback style code.
+`Promise` 类存在于很多现代 JavaScript 引擎中，而且可以很容易地被 [polyfill][polyfill]。Promise 的主要目的是为异步／回调风格的代码带来同步风格的错误处理。
 
-### Callback style code
+### 回调风格的代码
 
-In order to fully appreciate promises lets present a simple sample that proves the difficulty of creating reliable Async code with just callbacks. Consider the simple case of authoring an async version of loading JSON from a file. A synchronous version of this can be quite simply
+为了充分体会 promise 的好处，让我们来看看一个简单的例子，这个例子证明了只使用回调来创建可读异步代码的难处。考虑创作一个异步版本的从文件加载 JSON 的简单情况。同步的版本可以很简单
 
 ```ts
 import fs = require('fs');
@@ -13,10 +13,10 @@ function loadJSONSync(filename: string) {
     return JSON.parse(fs.readFileSync(filename));
 }
 
-// good json file
+// 好的 json 文件
 console.log(loadJSONSync('good.json'));
 
-// non-existent json file
+// 不存在的 json 文件
 try {
     console.log(loadJSONSync('absent.json'));
 }
@@ -24,7 +24,7 @@ catch (err) {
     console.log('absent.json error', err.message);
 }
 
-// invalid json file
+// 无效的 json 文件
 try {
     console.log(loadJSONSync('bad.json'));
 }
@@ -33,7 +33,7 @@ catch (err) {
 }
 ```
 
-There are three behaviors of this simple `loadJSONSync` function, a valid return value, a file system error or a JSON.parse error. We handle the errors with a simple try/catch as you are used to when doing synchronous programming in other languages. Now let's make a good async version of such a function. A decent initial attempt with a trivial error checking logic would be as follows,
+这个简单的 `loadJSONSync` 函数有三种行为，有效的返回值，文件系统错误或者 JSON.parse 错误。我们通过简单的 try/catch 来处理错误，跟你在其他语言做同步编程时使用的一样。现在让我们为这个函数制作一个好的异步版本。一个有着琐碎错误检查逻辑的像样初步尝试如下所示，
 
 ```ts
 import fs = require('fs');
@@ -46,23 +46,23 @@ function loadJSON(filename: string, cb: (error: Error, data: any) => void) {
 }
 ```
 
-Simple enough, it takes a callback, passes any file system errors to the callback. If no filesystem errors, it returns the `JSON.parse` result. A few points to keep in mind when working with async functions based on callbacks are
+就这么简单，它获取一个回调，把任何文件系统错误传到回调中。如果没有文件系统错误，它返回 `JSON.parse` 的结果。一些在使用基于回调的异步函数时需要记住的点是
 
-1. Never call the callback twice.
-1. Never throw an error.
+1. 不要调用两次回调。
+2. 不要抛出错误。
 
-This simple function however fails to accommodate for point two. In fact `JSON.parse` throws an error if it is passed bad JSON and the callback never gets called and the application crashes. This is demonstrated in the below example:
+然而这个简单的函数违背了第二点。实际上 `JSON.parse` 会在它被传入了错误的 JSON 时抛出错误，因而回调不会被调用，应用也随之崩溃。如下所示：
 
 ```ts
-// load invalid json
+// 加载无效的 json
 loadJSON('bad.json', function (err, data) {
-    // NEVER GETS CALLED!
+    // 永远不会被调用！
     if (err) console.log('bad.json error', err.message);
     else console.log(data);
 });
 ```
 
-A naïve attempt at fixing this would be to wrap the `JSON.parse` in a try catch as shown in the below example:
+一个天真的修复方案时把 `JSON.parse 包裹在 try catch 中，如下所示：
 
 ```ts
 import fs = require('fs');
@@ -83,14 +83,14 @@ function loadJSON(filename: string, cb: (error: Error) => void) {
     });
 }
 
-// load invalid json
+// 加载无效的 json
 loadJSON('bad.json', function (err, data) {
     if (err) console.log('bad.json error', err.message);
     else console.log(data);
 });
 ```
 
-However there is a subtle bug in this code. If the callback (`cb`), and not `JSON.parse`, throws an error, since we wrapped it in a `try`/`catch`, the `catch` executes and we call the callback again i.e. the callback gets called twice! This is demonstrated in the example below:
+然而在这份代码中有着微妙的 bug。如果回调（`cb`），非 `JSON.parse`，抛出了一个错误，因为我们把它包裹在 `try`/`catch` 里，`catch` 会执行而我们再一次调用了回调，即回调被调用了两次！如下所示：
 
 ```ts
 import fs = require('fs');
@@ -111,13 +111,13 @@ function loadJSON(filename: string, cb: (error: Error) => void) {
     });
 }
 
-// a good file but a bad callback ... gets called again!
+// 一个正确的文件，但是是不正确的回调 ... 被再次调用！
 loadJSON('good.json', function (err, data) {
     console.log('our callback called');
 
     if (err) console.log('Error:', err.message);
     else {
-        // lets simulate an error by trying to access a property on an undefined variable
+        // 让我们来通过访问一个 undefined 变量的属性来模拟一个错误
         var foo;
         console.log(foo.bar);
     }
@@ -131,11 +131,11 @@ our callback called
 Error: Cannot read property 'bar' of undefined
 ```
 
-This is because our `loadJSON` function wrongfully wrapped the callback in a `try` block. There is a simple lesson to remember here.
+这是因为我们的 `loadJSON` 函数错误地把回调包裹在 `try` 块中。有一个简单的教训要记住。
 
-> Simple lesson: Contain all you sync code in a try catch, except when you call the callback.
+> 简单的教训：把你的所有同步代码放在 try catch 中，除了当你要调用回调的时候。
 
-Following this simple lesson we have a fully functional async version of `loadJSON` as shown below:
+遵循上面的简单教训，我们有了一个完全实用的 `loadJSON` 异步版本，如下所示：
 
 ```ts
 import fs = require('fs');
@@ -153,25 +153,25 @@ function loadJSON(filename: string, cb: (error: Error) => void) {
     });
 }
 ```
-Admittedly this is not hard to follow once you've done it a few times but nonetheless it’s a lot of boiler plate code to write simply for good error handling. Now let's look at a better way to tackle asynchronous JavaScript using promises.
+诚然，如果你已经做过好几次了，这并不难理解，但尽管如此，为了简单的错误处理，它需要写太多的模版代码了。现在让我们来看看一个使用了 promise 的更好方式来实现异步 JavaScript。
 
-## Creating a Promise
+## 创建 Promise
 
-A promise can be either `pending` or `resolved` or `rejected`.
+一个 promise 可以变得 `pending` 或者 `resolved` 或者 `rejected`。
 
 ![](https://raw.githubusercontent.com/basarat/typescript-book/master/images/promise%20states%20and%20fates.png)
 
-Lets look at creating a promise. Its a simple matter of calling `new` on `Promise` (the promise constructor). The promise constructor is passed `resolve` and `reject` functions for settling the promise state.
+让我们关注于创建 promise。简单地在 `Promise`（promise 构造器）上调用 `new` 即可。promise 构造器被传递了 `resolve` 和 `reject` 函数味了控制 promise 状态。
 
 ```ts
 const promise = new Promise((resolve, reject) => {
-    // the resolve / reject functions control the fate of the promise
+    // resolve / reject 函数操控着 promise 的命运
 });
 ```
 
-### Subscribing to the fate of the promise
+### 订阅 promise 的命运
 
-The promise fate can be subscribed to using `.then` (if resolved) or `.catch` (if rejected).
+promise 的命运可以使用 `.then`（如果 resolved 的话）或者 `.catch`（如果 rejected 的话）来订阅。
 
 ```ts
 const promise = new Promise((resolve, reject) => {
@@ -181,7 +181,7 @@ promise.then((res) => {
     console.log('I get called:', res === 123); // I get called: true
 });
 promise.catch((err) => {
-    // This is never called
+    // 不被调用
 });
 ```
 
@@ -190,21 +190,21 @@ const promise = new Promise((resolve, reject) => {
     reject(new Error("Something awful happened"));
 });
 promise.then((res) => {
-    // This is never called
+    // 不被调用
 });
 promise.catch((err) => {
     console.log('I get called:', err.message); // I get called: 'Something awful happened'
 });
 ```
 
-### Promise Shortcuts
-* Quickly creating an already resolved promise : `Promise.resolve(result)`
-* Quickly creating an already rejected promise : `Promise.reject(error)`
+### Promise 快速方法
+* 快速创建一个已经 resolved 的 promise：`Promise.resolve(result)`
+* 快速创建一个已经 rejected 的 promise：`Promise.reject(error)`
 
-### Chain-ability of Promises
-The chain-ability of promises **is the heart of the benefit that promises provide**. Once you have a promise, from that point on, you use the `then` function to create a chain of promises.
+### Promise 的链式性
+Promise 的链式性 **是 promise 提供好处的核心**。一旦你有了一个 promise，从那一个点开始，你可以使用 `then` 函数来创建 promise 链。
 
-* If you return a promise from any function in the chain, `.then` is only called once the value is resolved
+* 如果你从链中的任何函数返回了一个 promise，`.then` 只会在值是 resolved 的时候被调用
 
 ```ts
 Promise.resolve(123)
@@ -217,12 +217,12 @@ Promise.resolve(123)
         return Promise.resolve(123);
     })
     .then((res) => {
-        console.log(res); // 123 : Notice that this `this` is called with the resolved value
+        console.log(res); // 123：需要注意的是这个 `this` 跟 resolved 的值一起被调用
         return Promise.resolve(123);
     })
 ```
 
-* you can aggregate the error handling of any preceding portion of the chain with a single `catch`
+* 你可以合并之前链上任何部分的错误处理到一个单独的 `catch` 中
 
 ```ts
 Promise.reject(new Error('something bad happened'))
@@ -243,7 +243,7 @@ Promise.reject(new Error('something bad happened'))
     });
 ```
 
-* the `catch` actually returns a new promise (effectively creating a new promise chain):
+* `catch` 实际上返回一个新的 promise（高效地创建一个新的 promise 链）：
 
 ```ts
 Promise.reject(new Error('something bad happened'))
@@ -260,7 +260,7 @@ Promise.reject(new Error('something bad happened'))
     })
 ```
 
-* Any synchronous errors thrown in a `then` (or `catch`) result in the returned promise to fail
+* 任何在 `then`（或者 `catch`）中被抛出的错误会导致返回的 promise 失败
 
 ```ts
 Promise.resolve(123)
@@ -277,11 +277,11 @@ Promise.resolve(123)
     })
 ```
 
-> The fact that errors jump to the tailing `catch` (and skip middle `then`) along with synchronous errors also getting caught effectively provides us with an async programming paradigm that allows better error handling than raw callbacks.
+> 错误跳到尾部的 `catch`（并且跳过了中间的 `then`），伴随着同步错误也能高效的被捕获的事实提供给我们一个异步编程范例，它允许了比原生回调更好的错误处理。
 
 
-### TypeScript and promises
-The great thing about TypeScript is that it understands the flow of values throw a promise chain.
+### TypeScript 和 promise
+TypeScript 的伟大之处在于它知道 promise 链抛出来的值流。
 
 ```ts
 Promise.resolve(123)
@@ -295,7 +295,7 @@ Promise.resolve(123)
     });
 ```
 
-Of course it also understands unwrapping any function calls that might return a promise:
+当然它也知道展开可能返回一个 promise 的任何函数调用：
 
 ```ts
 function iReturnPromiseAfter1Second():Promise<string> {
@@ -316,9 +316,9 @@ Promise.resolve(123)
 ```
 
 
-### Converting a callback style function to return a promise
+### 把一个回调风格的函数转换成返回一个 promise
 
-Just wrap the function call in a promise and `reject` if an error occurs, and resolve if it is all good. E.g. lets wrap `fs.readFile`
+只要把函数调用放在 promise 中，并且在错误发生时  `reject`，在没有错误时 `resolve` 就行了。例如，让我们来包裹 `fs.readFile`
 
 ```ts
 import fs = require('fs');
@@ -333,8 +333,8 @@ function readFileAsync(filename:string):Promise<any> {
 ```
 
 
-### Revisiting the JSON example
-Now let's revisit our `loadJSON` example and rewrite an async version that uses promises. All that we need to do is read the file contents as a promise, then parse them as JSON and we are done. This is illustrated in the below example:
+### 回过来看那个 JSON 的例子
+现在让我们回国来看我们的 `loadJSON` 例子，并且使用 promise 来重写异步版本。所有我们需要去做就是作为一个 promise 去文件内容，然后把它们解析成 JSON，然后就完成啦。如下所示：
 
 ```ts
 function loadJSONAsync(filename: string): Promise<any> {
@@ -345,16 +345,17 @@ function loadJSONAsync(filename: string): Promise<any> {
 }
 ```
 
-Usage (notice how similar it is to the original `sync` version introduced at the start of this section 🌹):
+使用的方法（注意它跟这章最开始介绍的原始同步版本是多么相似啊 🌹）：
+
 ```ts
-// good json file
+// 好的 json 文件
 loadJSONAsync('good.json')
     .then(function (val) { console.log(val); })
     .catch(function (err) {
         console.log('good.json error', err.message); // never called
     })
 
-// non-existent json file
+// 不存在的 json 文件
     .then(function () {
         return loadJSONAsync('absent.json');
     })
@@ -363,7 +364,7 @@ loadJSONAsync('good.json')
         console.log('absent.json error', err.message);
     })
 
-// invalid json file
+// 无效的 json 文件
     .then(function () {
         return loadJSONAsync('bad.json');
     })
@@ -373,13 +374,13 @@ loadJSONAsync('good.json')
     });
 ```
 
-### Parallel control flow
-We have seen how trivial doing a serial sequence of async tasks is with promises. It is simply a matter of chaining `then` calls.
+### 并行控制流
+我们已经看到了使用 promise 来做一系列顺序的异步任务的便利性。这只是简单的调用链式的 `then`。
 
-However you might potentially want to run a series of async tasks and then do something with the results of all of these tasks. `Promise` provides a static `Promise.all` function that you can use to wait for n number of promises to complete. You provide it with an array of `n` promises and it gives you array of `n` resolved values. This is shown below:
+然而你可能想要运行一系列异步的任务，然后得到所有结果来做些什么。`Promise` 提供了静态的 `Promise.all` 函数，你可以使用它来等待 n 个 promise 完成。你提供给它一个包含了 `n` 个 promise 的数组，而它返回给你包括了 `n` 个 resolved 值的数组。如下所示
 
 ```ts
-// an async function to simulate loading an item from some server
+// 一个模拟从服务器加载东西的异步函数
 function loadItem(id: string): Promise<{id: string}> {
     return new Promise((resolve)=>{
         console.log('loading item', id);
@@ -389,7 +390,7 @@ function loadItem(id: string): Promise<{id: string}> {
     });
 }
 
-// Chaining
+// 链式化
 let item1, item2;
 loadItem(1)
     .then((res) => {
@@ -401,7 +402,7 @@ loadItem(1)
         console.log('done');
     }); // overall time will be around 2s
 
-// Parallel
+// 并行
 Promise.all([loadItem(1),loaditem(2)])
     .then((res) => {
         [item1,item2] = res;
