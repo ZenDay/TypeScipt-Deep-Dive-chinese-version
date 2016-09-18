@@ -117,6 +117,7 @@ var iterator = generator();
 var foo = iterator.next();
 console.log(foo.value); // foo
 // 抛出错误 'bar'，恢复执行
+var nextThing = iterator.throw(new Error('bar'));
 ```
 
 这是几点总结：
