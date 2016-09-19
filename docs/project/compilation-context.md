@@ -1,2 +1,2 @@
-## Compilation Context
-The compilation context is basically just a fancy term for grouping of the files that TypeScript will parse and analyze to determine what is valid and what isn't. Along with the information about which files, the compilation context contains information about *which compiler options*. A great way to define this logical grouping (we also like to use the term *project*) is using a `tsconfig.json` file.
+## 编译上下文
+编译上下文仅仅是一个新奇的术语，用于组织那些 TypeScript 将会解析和分析来决定是否有效的文件。伴随着有关该文件的信息，编译上下文包含有关*该编译器选项*的信息。一种好的方法去定义这种逻辑组织（我们也喜欢用术语*项目*）是使用 `tsconfig.json` 文件。

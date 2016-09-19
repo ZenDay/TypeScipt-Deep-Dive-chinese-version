@@ -25,7 +25,7 @@
   * [Generators](docs/generators.md)
   * [Async Await](docs/async-await.md)
 * [项目](docs/project/project.md)
-  * [Compilation Context](docs/project/compilation-context.md)
+  * [编译上下文](docs/project/compilation-context.md)
     * [tsconfig.json](docs/project/tsconfig.md)
     * [Which Files?](docs/project/files.md)
   * [Declaration Spaces](docs/project/declarationspaces.md)
