@@ -24,7 +24,7 @@
   * [Promise](docs/promise.md)
   * [Generators](docs/generators.md)
   * [Async Await](docs/async-await.md)
-* [Project](docs/project/project.md)
+* [项目](docs/project/project.md)
   * [Compilation Context](docs/project/compilation-context.md)
     * [tsconfig.json](docs/project/tsconfig.md)
     * [Which Files?](docs/project/files.md)
