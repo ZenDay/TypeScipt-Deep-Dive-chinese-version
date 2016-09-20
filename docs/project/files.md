@@ -1,6 +1,6 @@
-## Which files?
+## 哪些文件？
 
-You can either use `files` to be explicit:
+你可以使用 `files` 来明确指出：
 
 ```json
 {
@@ -10,7 +10,7 @@ You can either use `files` to be explicit:
 }
 ```
 
-or `include` and `exclude` to specify files. e.g.
+或者 `include` 和 `exclude` 来指定文件，例如：
 
 
 ```json
@@ -25,7 +25,7 @@ or `include` and `exclude` to specify files. e.g.
 }
 ```
 
-Some notes:
+一些笔记：
 
-* if `files` are specified other options are ignored
-* `**/*` means all folder and any files (the extensions `.ts`/`.tsx` will be included and even `.js`/`.jsx` if `allowJs` is true).
+* 如果 `files` 被指定了，那么其他的选项会被忽略
+* `**/*` 表示所有文件夹和所有文件（`.ts`/`.tsx` 扩展名会被包括进去，如果 `allowJs` 是 true 的话，`.js`/`.jsx` 也会被包括进去）。
