@@ -30,6 +30,6 @@
     * [哪些文件？](docs/project/files.md)
   * [声明空间](docs/project/declarationspaces.md)
   * [模块](docs/project/modules.md)
-    * [File Module Details](docs/project/external-modules.md)
+    * [文件模块细节](docs/project/external-modules.md)
     * [globals.d.ts](docs/project/globals.md)
   * [Namespaces](docs/project/namespaces.md)

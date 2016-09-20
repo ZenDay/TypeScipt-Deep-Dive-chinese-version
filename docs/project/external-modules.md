@@ -1,115 +1,118 @@
-## External modules
-There is a lot of power and usability packed into the TypeScript external module pattern. Here we discuss its power and some patterns needed to reflect real world usages.
+## 外部模块
+TypeScript 外部模块模式有着强大的能力和可用性。这里我们讨论它的能力和一些需要反映到真实世界使用的模式。
 
-### File lookup
-The following statement:
+### 文件查找
+下面的语句：
 
 ```ts
 import foo = require('foo');
 ```
 
-Tells the TypeScript compiler to look for an external module declaration of the form:
+告诉 TypeScript 编译器去寻找这种形式的外部模块声明：
 
 ```ts
 declare module "foo" {
-    /// Some variable declarations
+    /// 一些变量定义
 
-    export var bar:number; /*sample*/
+    export var bar:number; /*例子*/
 }
 ```
-An import with a relative path e.g.:
+一个相对路径的引入例子：
 
 ```ts
 import foo = require('./foo');
 ```
-Tells the TypeScript compiler to look for a TypeScript file at the relative location `./foo.ts` or `./foo.d.ts` with respect to the current file.
+告诉 TypeScript 编译器在相对于当前文件的路径 `./foo.ts` 或者 `./foo.d.ts` 去寻找 TypeScript 文件。
 
-This is not the complete specification but it's a decent mental model to have and use. We will cover the gritty details later.
+这不是完整的规范，但它是一个正确的思想模型来拥有和使用。我们稍后会描述本质的细节。
 
-### Compiler Module Option
-The following statement:
-
-```ts
-import foo = require('foo');
-```
-
-will generate *different* JavaScript based on the compiler *module* option (`--module commonjs` or `--module amd` or `--module umd` or `--module system`).
-
-Personal recommendation : Use `--module commonjs` and then your code will work as it is for NodeJS and for frontend you can use something like `webpack`.
-
-### Import type only
-The following statement:
+### 编译器模块选项
+下面的语句：
 
 ```ts
 import foo = require('foo');
 ```
 
-actually does *two* things:
+基于编译器*模块*选项（`--module commonjs` 或 `--module amd` 或 `--module umd` 或 `--module system`）会生成*不同的* JavaScript。
 
-* Imports the type information of the foo module.
-* Specifies a runtime dependency on the foo module.
+个人推荐：使用 `--module commonjs`，然后你的代码就可以在 NodeJS 和使用了类似于 `webpack` 的前端上工作了。
 
-You can pick and choose so that only *the type information* is loaded and no runtime dependency occurs. Before continuing you might want to recap the [*declaration spaces*](../project/declarationspaces.md) section of the book.
+### 只引入类型
+下面的语句
 
-If you do not use the imported name in the variable declaration space then the import is completely removed from the generated JavaScript. This is best explained with examples. Once you understand this we will present you with use cases.
-
-#### Example 1
 ```ts
 import foo = require('foo');
 ```
-will generate the JavaScript:
+
+实际上做了*两*件事
+
+* 引入 foo 模块的类型信息。
+* 指定 foo 模块上的运行时依赖。
+
+你可以进行挑选以便只有*类型信息*被加载而没有运行时依赖发生。在继续下去之前，你可能想要重温下这本书的 [*声明空间*](../project/declarationspaces.md) 这章。
+
+如果你没有使用变量声明空间中的引入名称，那么引入会完全从生成的 JavaScript 中被移除。最好通过例子来解释这些东西。一旦你理解它，我们就会给你呈现一些用例。
+
+#### 例子 1
+```ts
+import foo = require('foo');
+```
+会生成 JavaScript：
 
 ```js
 
 ```
-Thats right. An *empty* file as foo is not used.
+没错，因为 foo 没被使用，生成了*文件*。
 
-#### Example 2
+#### 例子 2
 ```ts
 import foo = require('foo');
 var bar: foo;
 ```
-will generate the JavaScript:
+会生成 JavaScript：
+
 ```js
 var bar;
 ```
-This is because `foo` (or any of its properties e.g. `foo.bas`) is never used as a variable.
+这是因为 `foo`（或者它的任意属性如：`foo.bas`）从未被作为变量使用。
 
-#### Example 3
+#### 例子 3
 ```ts
 import foo = require('foo');
 var bar = foo;
 ```
-will generate the JavaScript (assuming commonjs):
+会生成 JavaScript（假设是 commonjs）：
+
 ```js
 var foo = require('foo');
 var bar = foo;
 ```
-This is because `foo` is used as a variable.
+这是因为 `foo` 被用做变量。
 
 
-### Use case: Lazy loading
-Type inference needs to be done *upfront*. This means that if you want to use some type from a file `foo` in a file `bar` you will have to do:
+### 用例：懒加载
+类型推断需要在*早期*完成。这意味着如果你想要在文件 `bar` 中使用一些来自文件 `foo` 的类型，你必须要这样做：
 
 ```ts
 import foo = require('foo');
 var bar: foo.SomeType;
 ```
-However you might want to only load the file `foo` at runtime under certain conditions. For such cases you should use the `import`ed name only in *type annotations* and **not** as a *variable*. This removes any *upfront* runtime dependency code being injected by TypeScript. Then *manually import* the actual module using code that is specific to your module loader.
+然而你可能想在运行时处于特定状态时才加载文件 `foo`。这些情况下你应该只在*类型注解*下使用 `import` 的名称，而且**不**作为*变量*使用。这移除了所有早期被 TypeScript 注入的运行时依赖代码。 Then *manually import* the actual module using code that is specific to your module loader.然后*手动的引入*特定于你的模块加载器的真正模块使用代码。
 
-As an example, consider the following `commonjs` based code where we only load a module `'foo'` on a certain function call
+作为例子，下面的基于 `commonjs` 的代码里，我们只在特定的函数调用上加载一个模块
 
 ```ts
 import foo = require('foo');
 
 export function loadFoo() {
-    // This is lazy loading `foo` and using the original module *only* as a type annotation
+    // This is lazy loading `foo` and using the original module *only* as a type annotation这里懒加载 `foo` 以及使用了原始的模块*只*作为类型注解。
     var _foo: typeof foo = require('foo');
-    // Now use `_foo` as a variable instead of `foo`.
+    // 现在使用 `_foo` 作为 `foo` 的替代变量。
 }
 ```
 
-A similar sample in `amd` (using requirejs) would be:
+一个类似的 `amd`（使用了 requirejs）例子会是：
+
 ```ts
 import foo = require('foo');
 
@@ -121,17 +124,18 @@ export function loadFoo() {
 }
 ```
 
-This pattern is commonly used:
-* in web apps where you load certain JavaScript on particular routes
-* in node applications where you only load certain modules if needed to speed up application bootup.
+这种模式通常用于：
 
-### Use case: Breaking Circular dependencies
+* 在特定路由下加载特定的 JavaScript 的 web 应用
+* 为了加速应用的启动按需加载特定模块的 node 应用。
 
-Similar to the lazy loading use case certain module loaders (commonjs/node and amd/requirejs) don't work well with circular dependencies. In such cases it is useful to have *lazy loading* code in one direction and loading the modules upfront in the other direction.
+### 用例：打破循环依赖
 
-### Use case: Ensure Import
+类似于懒加载用例，特定的模块加载器（commonjs/node 和 amd/requirejs）在循环依赖下不能正常工作。在这个例子里，一个方向上的*懒加载*代码和另一个方向上的提前加载模块就十分有用了。
 
-Sometimes you want to load a file just for the side effect (e.g the module might register itself with some library like [CodeMirror addons](https://codemirror.net/doc/manual.html#addons) etc.). However if you just do a `import/require` the transpiled JavaScript will not contain a dependency on the module and your module loader (e.g. webpack) might completely ignore the import. In such cases you can use a `ensureImport` variable to ensure that the compiled JavaScript takes a dependency on the module e.g.:
+### 用例：确保引入
+
+有的时候，你想要只是为了副作用加载一个文件（例如模块可能通过一些像是 [CodeMirror addons](https://codemirror.net/doc/manual.html#addons) 的库注册了自己等）。然而如果你仅仅做了 `import/require`，转换出来的 JavaScript 将不包括模块上的依赖，而你的模块加载器（例如 webpack）可能会完全忽略引入。在这个例子里你可以使用 `ensureImport` variable 来确保编译出来的 JavaScript 拿到了模块的依赖，例如：
 
 ```ts
 import foo = require('./foo');
@@ -142,6 +146,6 @@ const ensureImport: any =
     || bar
     || bas;
 ```
-The key advantage of using `import/require` instead of just `var/require` is that you get file path completion / checking / goto definition navigation etc.
+The key advantage of using `import/require` instead of just `var/require` is that you get file path completion / checking / goto definition navigation etc.使用 `import/require` 替代仅仅是 `var/require` 的关键好处在于你可以获得文件路径补全／检查／跳转定义导航等。
 
 [](// TODO: es6 modules)
