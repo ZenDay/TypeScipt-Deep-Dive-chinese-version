@@ -1,39 +1,39 @@
-## Modules
+## 模块
 
-### Global Module
+### 全局模块
 
-By default when you start typing code in a new TypeScript file your code is in a *global* namespace. As a demo consider a file `foo.ts`:
+默认情况下当你开始在一个新的 TypeScript 文件里写代码时，你的代码时在*全局*命名空间里的。以 `foo.ts` 作为例子：
 
 ```ts
 var foo = 123;
 ```
 
-If you now create a *new* file `bar.ts` in the same project, you will be *allowed* by the TypeScript type system to use the variable `foo` as if it was available globally:
+如果你现在创建一个*新的*文件 `bar.ts` 在相同的项目中，你会被 TypeScript 类型系统允许使用变量 `foo 因为它是全局可用的：
 
 ```ts
-var bar = foo; // allowed
+var bar = foo; // 允许
 ```
-Needless to say having a global namespace is dangerous as it opens your code up for naming conflicts. We recommend using file modules which are presented next.
+不用说全局命名空间是危险的，因为它会导致你的代码出现命名冲突。我们推荐使用文件模块，这将会在下面介绍。
 
-### File Module
-Also called *external modules*. If you have an `import` or an `export` at the root level of a TypeScript file then it creates a *local* scope within that file. So if we were to change the previous `foo.ts` to the following (note the `export` usage):
+### 文件模块
+也叫*外部模块*。如果你在 TypeScript 文件的根层次有`import` 或 `export` 的话，它会在文件中创建一个*本地*作用域。所以如果我们把之前的 `foo.ts` 改成下面这样（注意 `export` 的使用）：
 
 ```ts
 export var foo = 123;
 ```
 
-We will no longer have `foo` in the global namespace. This can be demonstrated by creating a new file `bar.ts` as follows:
+我们会不再在全局命名空间里有 `foo`。这可以通过创建一个新的文件 `bar.ts` 得到证明：
 
 ```ts
 var bar = foo; // ERROR: "cannot find name 'foo'"
 ```
 
-If you want to use stuff from `foo.ts` in `bar.ts` *you need to explicitly import it*. This is shown in an updated `bar.ts` below:
+如果你想要在 `bar.ts` 中使用 `foo.ts` 中的东西，*你需要明确地引入它*。下面是更新后的 `bar.ts`：
 
 ```ts
 import {foo} from "./foo";
-var bar = foo; // allowed
+var bar = foo; // 允许
 ```
-Using an `import` in `bar.ts` not only allows you to bring in stuff from other files, but also marks the file `bar.ts` as a *module* and therefore `bar.ts` doesn't pollute the global namespace either.
+在 `bar.ts` 中使用一个 `import` 不仅允许你从其他文件中带来东西，还把文件 `bar.ts` 标记为一个*模块*，因此 `bar.ts` 不会污染全局命名空间。
 
-What JavaScript is generated from a given TypeScript file that uses external modules is driven by the compiler flag called `module`.
+使用了外部模块的给定 TypeScript 文件生成的 JavaScript 取决于编译器标识 `module`。
