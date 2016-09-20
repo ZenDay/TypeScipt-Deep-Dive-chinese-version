@@ -1,16 +1,16 @@
-## Declaration Spaces
+## 声明空间
 
-There are two declaration spaces in TypeScript: The *variable* declaration space and the *type* declaration space. These concepts are explored below.
+TypeScript 中有两个声明空间：*变量*声明空间和*类型*声明空间。这些概念会在接下来探讨。
 
-### Type Declaration Space
-The type declaration space contains stuff that can be used as a type annotation. E.g the following are a few type declarations:
+### 类型声明空间
+类型声明空间包含了哪些可以用作类型注解的东西。例如，下面是一些类型声明：
 
 ```ts
 class Foo { }
 interface Bar { }
 type Bas = {}
 ```
-This means that you can use `Foo`, `Bar`, `Bas` etc. as a type annotation. E.g.:
+这意味着你可以使用`Foo`，`Bar`，`Bas`等作为类型注解。例如
 
 ```ts
 var foo: Foo;
@@ -18,47 +18,47 @@ var bar: Bar;
 var bas: Bas;
 ```
 
-Notice that even though you have `interface Bar`, *you can't use it as a variable* because it doesn't contribute to the *variable declaration space*. This is shown below:
+需要注意的是即使你有 `interface Bar`，*你不能把它作为变量来使用*，因为它不属于*变量声明空间*。如下所示：
 
 ```ts
 interface Bar {};
 var bar = Bar; // ERROR: "cannot find name 'Bar'"
 ```
 
-The reason why it says `cannot find name` is because the name `Bar` *is not defined* in the *variable* declaration space. That brings us to the next topic "Variable Declaration Space".
+它说 `cannot find name` 的原因是名称 `Bar` *未定义*在*变量*声明空间里。这引出了我们的下一个话题“变量声明空间”。
 
-### Variable Declaration Space
-The variable declaration space contains stuff that you can use as a variable. We saw that having `class Foo` contributes a type `Foo` to the *type* declaration space. Guess what?, it also contributes a *variable* `Foo` to the *variable* declaration space as shown below:
+### 变量声明空间
+变量声明空间包含了你可以用作变量的东西。我们之前看到 `class Foo` 在*类型*声明空间中声明了类型 `Foo`。猜猜怎么样？它也在*变量声明空间*里声明了*变量* `Foo`，如下所示：
 
 ```ts
 class Foo { }
 var someVar = Foo;
 var someOtherVar = 123;
 ```
-This is great as sometimes you want to pass classes around as variables. Remember that
+这对于有时候想要把类作为变量传递的情况是很好的。记住
 
-* We couldn't use something like an `interface` that is *only* in the *type* declaration space as a variable.
+* 我们不能使用像是一个 `interface` 这样*只*存在于*类型*声明空间的东西作为变量。
 
-Similarly something that you declare with `var`, is *only* in the *variable* declaration space and cannot be used as a type annotation:
+同样的，你使用 `var` 声明的一些东西，*只*存在于*变量*声明空间而不能用做类型注解：
 
 ```ts
 var foo = 123;
 var bar: foo; // ERROR: "cannot find name 'foo'"
 ```
-The reason why it says `cannot find name` is because the name `foo` *is not defined* in the *type* declaration space.
+The reason why it says `cannot find name` is because the name `foo` *is not defined* in the *type* declaration space.它说 `cannot find name` 的原因是名称 `foo` *未定义*在*类型*声明空间里。
 
-### TIPS
+### 提示
 
-#### Copying Stuff around in the Type Declaration Space
+#### 复制在类型声明空间中的东西
 
-If you want to move a class around you might be tempted to do the following:
+如果你想要移动一个类，你可能会这样做：
 
 ```ts
 class Foo { }
 var Bar = Foo;
 var bar: Bar; // ERROR: "cannot find name 'Bar'"
 ```
-This is an error because `var` only copied the `Foo` into the *variable* declaration space and you therefore cannot use `Bar` as a type annotation. The proper way is to use the `import` keyword. Note that you can only use the `import` keyword in such a way if you are using *namespaces* or *modules* (more on these later):
+这会导致错误，因为 `var` 仅仅复制 `Foo` 到*变量*声明空间中，因此你不能使用 `Bar` 作为类型注解。正确的方法是使用 `import` 关键字。需要注意的是如果你使用*命名空间*或者*模块*（之后会有更多关于它们的讨论），你只能以这种方法使用 `import` 关键字：
 
 ```ts
 namespace importing {
@@ -69,29 +69,29 @@ import Bar = importing.Foo;
 var bar: Bar; // Okay
 ```
 
-#### Capturing the type of a variable
+#### 捕获变量的类型
 
-You can actually use a variable in a type annotation using the `typeof` operator. This allows you to tell the compiler that one variable is the same type as another. Here is an example to demonstrate this:
+实际上你可以使用一个类型注解中使用了 `typeof` 操作符的变量。这允许你告诉编译器一个变量跟另一个是相同类型。如下所示：
 
 ```ts
 var foo = 123;
-var bar: typeof foo; // `bar` has the same type as `foo` (here `number`)
+var bar: typeof foo; // `bar` 跟 `foo` 有着相同类型（这里是 `number`）
 bar = 456; // Okay
 bar = '789'; // ERROR: Type `string` is not `assignable` to type `number`
 ```
 
-#### Capturing the type of a class member
+#### 捕获类成员的类型
 
-Similar to capturing the type of a variable, you just declare a variable purely for type capturing purposes:
+类似于捕获变量的类型，你可以仅仅为了类型捕获的目的声明一个变量：
 
 ```ts
 class Foo {
-  foo: number; // some member whose type we want to capture
+  foo: number; // 一些我们想捕获它类型的成员
 }
 
-// Purely to capture type
+// 纯粹为了捕获类型
 declare let _foo: Foo;
 
-// Same as before
+// 跟之前一样
 let bar: typeof _foo.foo;
 ```

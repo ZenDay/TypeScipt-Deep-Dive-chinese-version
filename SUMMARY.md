@@ -28,7 +28,7 @@
   * [编译上下文](docs/project/compilation-context.md)
     * [tsconfig.json](docs/project/tsconfig.md)
     * [哪些文件？](docs/project/files.md)
-  * [Declaration Spaces](docs/project/declarationspaces.md)
+  * [声明空间](docs/project/declarationspaces.md)
   * [Modules](docs/project/modules.md)
     * [File Module Details](docs/project/external-modules.md)
     * [globals.d.ts](docs/project/globals.md)
