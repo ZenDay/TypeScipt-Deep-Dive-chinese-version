@@ -1,7 +1,7 @@
 # globals.d.ts
 
-We discussed *global* vs. *file* modules when covering [projects](./modules.md) and recommended using file based modules and not polluting the global namespace.
+我们在讨论[项目](./modules.md)时就已经讨论过*全局* vs. *文件*模块的问题，并且推荐使用基于文件的模块和不污染全局命名空间。
 
-Nevertheless it is convenient to have *some* files just with type declarations (for smaller projects preferably one called `globals.d.ts`) in the global namespace to make it easy to have some *types* just *magically* available for consumption in *all* your TypeScript code. For any code that is going to generate *JavaScript* we still recommend using *file modules*.
+虽然拥有*一些*仅仅用于类型定义的文件（在更小的项目一般叫做`globals.d.ts`）在全局命名空间里使在*所有*你的 TypeScript 代码中可以有一些*神奇*可用的*类型*很方便。对于任何将会生成 *JavaScript* 的代码来说我们仍然推荐使用 *文件模块*。
 
-`globals.d.ts` is great for adding extensions to `lib.d.ts`.
+`globals.d.ts` 对于给 `lib.d.ts` 添加扩展来说，还是很不错的。
