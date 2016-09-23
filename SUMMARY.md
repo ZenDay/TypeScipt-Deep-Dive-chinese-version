@@ -32,4 +32,4 @@
   * [模块](docs/project/modules.md)
     * [文件模块细节](docs/project/external-modules.md)
     * [globals.d.ts](docs/project/globals.md)
-  * [Namespaces](docs/project/namespaces.md)
+  * [命名空间](docs/project/namespaces.md)

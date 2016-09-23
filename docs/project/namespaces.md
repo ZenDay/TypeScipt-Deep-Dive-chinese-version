@@ -1,5 +1,5 @@
-## Namespaces
-Namespaces provide you with a convenient syntax around a common pattern used in JavaScript:
+## 命名空间
+命名空间为你提供了一个关于使用在 JavaScript 中的普遍模式的一个方便的语法：
 
 ```ts
 (function(something) {
@@ -9,7 +9,7 @@ Namespaces provide you with a convenient syntax around a common pattern used in 
 })(something || something = {})
 ```
 
-Basically `something || something = {}` allows an anonymous function `function(something) {}` to *add stuff to an existing object* (the `something ||` portion) or *start a new object then add stuff to that object* (the `|| something = {}` portion). This means that you can have two such blocks split by some execution boundary :
+基本上 `something || something = {}` 允许匿名函数 `function(something) {}` 去*添加东西到一个现存项目中*（`something ||` 部分）或者*创建一个新对象然后把东西添加到这个对象里面去*（`|| something = {}` 部分）。这意味着你可以拥有两个这样被执行边界分开的块：
 
 ```ts
 (function(something) {
@@ -30,7 +30,7 @@ console.log(something); // {foo:123, bar:456}
 
 ```
 
-This is commonly used in  the JavaScript land for making sure that stuff doesn't leak into the global namespace. With file based modules you don't need to worry about this, but the pattern is still useful for *logical grouping* of a bunch of functions. Therefore TypeScript provides the `namespace` keyword to group these e.g.
+这在  JavaScript 中很常使用，以确保东西不会泄漏到全局命名空间里。有了基于文件的模块，你不再需要担心这些，但是这个模式仍然对于一堆函数的*逻辑分组*非常有用。因此 TypeScript 提供了 `namespace` 关键字来分组它们，例如：
 
 ```ts
 namespace Utility {
@@ -42,20 +42,20 @@ namespace Utility {
     }
 }
 
-// usage
+// 使用方式
 Utility.log('Call me');
 Utility.error('maybe!');
 ```
-The `namespace` keyword generates the same JavaScript that we saw earlier:
+`namespace` 关键字生成了跟我们之前看到的一样的 JavaScript：
 
 ```ts
 (function (Utility) {
 
-// Add stuff to Utility
+// 添加东西到 Utility 里
 
 })(Utility || (Utility = {}));
 ```
 
-One thing to note is that namespaces can be nested so you can do stuff like `namespace Utility.Messaging` to nest a `Messaging` namespace under `Utility`.
+一点需要注意的是命名空间可以是嵌套的，因此你可以做像是 `namespace Utility.Messaging` 的东西来嵌套一个 `Messaging` 命名空间到 `Utility`。
 
-For most projects we recommend using external modules and using `namespace` for quick demos and porting old JavaScript code.
+对于大部分的项目来说，我们推荐使用外部模块，而对于快速演示和接入旧的 JavaScript 代码使用 `namespace`。
