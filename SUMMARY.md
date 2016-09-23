@@ -33,3 +33,5 @@
     * [文件模块细节](docs/project/external-modules.md)
     * [globals.d.ts](docs/project/globals.md)
   * [命名空间](docs/project/namespaces.md)
+* [NodeJS 快速开始](docs/quick/nodejs.md)
+* [浏览器端快速开始](docs/quick/browser.md)
