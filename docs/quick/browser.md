@@ -1,17 +1,17 @@
-# TypeScript in the browser
-If you are using TypeScript to create a web application here are my recommendations:
+# 浏览器端 TypeScript
+如果你正在使用 TypeScript 来创建 web 应用，这里是我的建议：
 
-## General Machine Setup
+## 通用机器设置
 
-* Install [NodeJS](https://nodejs.org/en/download/)
+* 安装 [NodeJS](https://nodejs.org/en/download/)
 
-## Project Setup
-* Create a project dir
+## 项目设置
+* 创建一个项目文件夹
 ```
 mkdir your-project
 cd your-project
 ```
-* Create `tsconfig.json`. We discuss [modules here](../project/external-modules.md). Also good to have it setup for `tsx` compilation out of the box.
+* 创建 `tsconfig.json`。这里我们讨论[模块](../project/external-modules.md)。同样也可以设置 `tsx` 编译。
 ```json
 {
     "compilerOptions": {
@@ -26,19 +26,19 @@ cd your-project
     "compileOnSave": false
 }
 ```
-* Create an npm project:
+* 创建一个 npm 项目：
 ```
 npm init -y
 ```
-* Install TypeScript-nightly, webpack, [`ts-loader`](https://github.com/TypeStrong/ts-loader/), typings
+* 安装 TypeScript-nightly，webpack，[`ts-loader`](https://github.com/TypeStrong/ts-loader/), typings
 ```
 npm install typescript@next webpack ts-loader typings --save-dev
 ```
-* Init typings (creates a `typings.json` file for you).
+* 初始化 typings（创建 `typings.json` 文件）。
 ```
 "./node_modules/.bin/typings" init
 ```
-* Create a `webpack.config.js` to bundle your modules into a single `bundle.js` file that contains all your resources:
+* 创建 `webpack.config.js` 来打包你的模块到一个单独的 `bundle.js` 文件，它包含了所有你的资源：
 ```js
 module.exports = {
     entry: './src/app.tsx',
@@ -57,7 +57,7 @@ module.exports = {
     }
 }
 ```
-* Setup an npm script to run a build. Also have it run `typings install` on `npm install`. In your `package.json` add a `script` section:
+* 设置 npm 脚本来运行构建。同样使它在 `npm install` 时运行 `typings install`。在你的 `package.json` 里添加 `script` 部分：
 ```json
 "scripts": {
     "prepublish": "typings install",
@@ -65,16 +65,16 @@ module.exports = {
 },
 ```
 
-Now just run the following (in the directory that contains `webpack.config.js`):
+现在只要运行下面的（在包含了 `webpack.config.js` 的目录下）：
 
 ```
 npm run watch
 ```
 
-Now if you make edits to your `ts` or `tsx` file webpack will generate `bundle.js` for you. Serve this up using your web server 🌹.
+现在如果你编辑了你的 `ts` 或者 `tsx` 文件，webpack 会为你生成 `bundle.js`。使用你的 web 服务器托管这个文件🌹。
 
-## More
-If you are going to use React (which I highly recommend you give a look), here are a few more steps:
+## 更多
+如果你打算使用 React（我非常推荐你去看看它），这里还有一些步骤：
 
 ```
 npm install react react-dom --save-dev
@@ -88,7 +88,8 @@ npm install react react-dom --save-dev
 "./node_modules/.bin/typings" install dt~react-dom --global --save
 ```
 
-A demo `index.html`:
+示例的 `index.html`：
+
 ```
 <html>
     <head>
@@ -103,7 +104,8 @@ A demo `index.html`:
     </body>
 </html>
 ```
-A demo `./src/app.tsx`
+示例的 `./src/app.tsx`
+
 ```ts
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -123,4 +125,4 @@ ReactDOM.render(
 );
 ```
 
-You can clone this demo project here : https://github.com/basarat/react-typescript
+你可以在这里克隆示例项目：https://github.com/basarat/react-typescript
