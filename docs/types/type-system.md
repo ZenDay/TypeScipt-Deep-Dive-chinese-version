@@ -1,14 +1,15 @@
-# TypeScript Type System
-We covered the main features of the TypeScript Type System back when we discussed *Why TypeScript?*. The following are a few key takeaways from that discussion which don't need further explanation:
-* The type system in typescript is designed to be *optional* so that *your javascript is typescript*.
-* TypeScript does not block *JavaScript emit* in the presence of Type Errors, allowing you to *progressively update your JS to TS*.
+# TypeScript 类型系统
+在我们讨论*为什么选择 TypeScript*的时候就已经谈论过了 TypeScript 类型系统的主要特性。下面是从讨论中提取出来的一些不需要更深层解释的关键点：
 
-Now lets start with the *syntax* of the TypeScript type system. This way you can start using these annotations in your code immediately and see the benefit. This will prepare you for a deeper dive later.
+* TypeScript 中的类型系统被设计为可选的，因此*你的 JavaScript 就是 TypeScript*。
+* 当类型错误存在时，TypeScript 不会停止*生成 JavaScript*，允许你*渐进把 JS 更新成 TS*。
 
-## Basic Annotations
-As mentioned before Types are annotated using `:TypeAnnotation` syntax. Anything that is available in the type declaration space can be used as a Type Annotation.
+现在让我们开始讲述 TypeScript 类型系统的*语法*。这次你可以开始马上在代码中使用这些注解并且看到它们的优点。这会为接下来的深入挖掘做准备。
 
-The following example demonstrates type annotations can be used for variables, function parameters and function return values.
+## 基本注解
+就像先前提到的那样，类型会被注解以 `:TypeAnnotation` 语法。任何在类型声明空间可用的东西都能用作类型注解。
+
+下面的例子展示了类型注解能被用在变量，函数参数和函数返回值上。
 
 ```
 var num: number = 123;
@@ -17,8 +18,8 @@ function identity(num: number): number {
 }
 ```
 
-### Primitive Types
-The JavaScript primitive types are well represented in the TypeScript type system. This means `string`, `number`, `boolean` as demonstrated below:
+### 原始类型
+JavaScript 原始类型很好地体现在 TypeScript 类型系统中。即 `string`，`number` 和 `boolean`，如下所示：
 
 ```ts
 var num: number;
@@ -37,8 +38,8 @@ bool = false;
 bool = 'false'; // Error
 ```
 
-### Arrays
-TypeScript provides dedicated type syntax for arrays to make it easier for you to annotate and document your code. The syntax is basically postfixing `[]` to any valid type annotation (e.g. `:boolean[]`). It allows you to safely do any array manipulation that you would normally do and protects you from errors like assigning a member of the wrong type.  This is demonstrated below:
+### 数组
+TypeScript 为数组提供了专用的类型语法来使你更简单地注解和编档你的代码。语法是后置 `[]` 于任意有效的类型注解上（例如 `:boolean[]`）。这允许你安全地做任何你通常会做的数组操作，以及从像是赋值一个成员以错误的类型的错误中保护你。如下所示：
 
 ```ts
 var boolArray: boolean[];
@@ -54,8 +55,8 @@ boolArray = 'false'; // Error!
 boolArray = [true, 'false']; // Error!
 ```
 
-### Interfaces
-Interfaces are the core way in TypeScript to compose multiple type annotations into a single named annotation. Consider the following example :
+### 接口
+接口在 TypeScript 中是核心的方法去组合多个类型注解到一个单独的命名注解上。考虑下面的例子：
 
 ```ts
 interface Name {
@@ -77,10 +78,10 @@ name = {           // Error : `second` is the wrong type
     second: 1337
 };
 ```
-Here we've composed the annotations `first: string` + `second: string` into a new annotation `Name` that enforces the type checks on individual members. Interfaces have a lot of power in TypeScript and we will dedicate an entire section to how you can use that to your advantage.
+这里我们组合了注解 `first: string` + `second: string` 到一个新的注解 `Name` 上，以强制类型检查单独的成员。接口在 TypeScript 有着很多能力，而我们会使用一整章来讲述你可以怎么使用它来获得好处。
 
-### Inline Type Annotation
-Instead of creating a new `interface` you can annotate anything you want *inline* using `:{ /*Structure*/ }`. The previous example presented again with an inline type:
+### 行内类型注解
+取创建一个新的 `interface` 而代之，你可以在行内使用 `:{ /*Structure*/ }` 标注任何东西。之前的例子用行内的方法重写：
 
 ```ts
 var name: {
@@ -100,44 +101,44 @@ name = {           // Error : `second` is the wrong type
     second: 1337
 };
 ```
-Inline types are great for quickly providing a one off type annotation for something. It saves you the hassle of coming up with (a potentially bad) type name. However, if you find yourself putting in the same type annotation inline multiple times its a good idea to consider refactoring it into an interface (or a `type alias` covered later in this section).
+行内的类型用于快速提供一次性类型标注。这可以把你从想一个（可能并不好）的类型名称中解救出来。然而，如果你发现你自己多次放置相同的行内类型标注，最好考虑重构它为一个接口（或者一个 `type alias`，后面会讲到）。
 
-## Special Types
-Beyond the primitive types that have covered there are few types that have special meaning in TypeScript. These are `any`, `null`, `undefined`, `void`.
+## 特殊类型
+除了之前提到的原始类型以外，还有一些类型在 TypeScript 里有着特殊意义。它们分别是 `any`，`null`，`undefined` 和 `void`。
 
 ### any
-The `any` type holds a special place in the TypeScript type system. It gives you an escape hatch from the type system to tell the compiler to bugger off. `any` is compatible with *any and all* types in the type system. This means that *anything can be assigned to it* and *it can be assigned to anything*. This is demonstrated it the below example:
+`any` 类型在 TypeScript 类型系统中保持一个特殊地位。它给了你一个逃离类型系统告诉编译器出现 bug 的方式。`any` 兼容类型系统中的*任意所有*类型。这意味着*任何东西可以赋值给它*而*它可以赋值给任何东西*。例子如下所示：
 
 ```ts
 var power: any;
 
-// Takes any and all types
+// 获取任意所有类型
 power = '123';
 power = 123;
 
-// Is compatible with all types
+// 兼容所有类型
 var num: number;
 power = num;
 num = power;
 ```
 
-If you are porting JavaScript code to TypeScript, you are going to be close friends with `any` in the beginning. However, don't take this friendship too seriously as it means that *it is up to you to ensure the type safety*. You are basically telling the compiler to *not do any meaningful static analysis*.
+如果你正在把 JavaScript 代码移植到 TypeScript，在开始时你会跟 `any` 有一段友情。然而，别太把这段友情当真因为*确保类型安全的决定权在于你*。你基本上在告诉编译器*别做任何有意义的静态分析*。
 
-### `null` and `undefined`
+### `null` 和 `undefined`
 
-The `null` and `undefined` JavaScript literals are effectively treated by the type system the same as something of type `any`. These literals can be assigned to any other type. This is demonstrated in the below example:
+`null` 和 `undefined` JavaScript 关键字会被类型系统简单地看作与类型 `any` 一样。这些关键字能被赋值到任意其他类型。例子如下所示：
 
 ```ts
 var num: number;
 var str: string;
 
-// These literals can be assigned to anything
+// 这些关键字能被赋值到任何东西
 num = null;
 str = undefined;
 ```
 
 ### `:void`
-Use `:void` to signify that a function does not have a return type.
+使用 `:void` 来标识函数不会有任何返回值。
 
 ```ts
 function log(message): void {
@@ -145,8 +146,8 @@ function log(message): void {
 }
 ```
 
-## Generics
-Many algorithms and data structures in computer science do not depend on the *actual type* of the object. A simple toy example is a function that takes a list of items and returns a reversed list of items:
+## 泛型
+计算机科学中很多算法和数据结构不依赖于对象的*实际类型*。一个简单的玩具例子是，一个获取一个列表然后返回一个反向列表的函数：
 
 ```ts
 function reverse<T>(items: T[]): T[] {
@@ -161,7 +162,7 @@ var sample = [1, 2, 3];
 var reversed = reverse(sample);
 console.log(reversed); // 3,2,1
 
-// Safety!
+// 安全!
 reversed[0] = '1';     // Error!
 reversed = ['1', '2']; // Error!
 
@@ -169,7 +170,7 @@ reversed[0] = 1;       // Okay
 reversed = [1, 2];     // Okay
 ```
 
-Here you are basically saying that the function `reverse` takes an array (`items: T[]`) of *some* type `T` (notice the type parameter in `reverse<T>`) and returns an array of type `T` (notice `: T[]`). Because the `reverse` function returns items of the same type as it takes, TypeScript knows the `reversed` variable is also of type `number[]` and will give you Type safety. Similarly if you pass in an array of `string[]` to the reverse function the returned result is also an array of `string[]` and you get similar type safety as shown below:
+这里基本上就是说函数 `reverse` 拿了一个数组（`items: T[]`），它是*某个*类型 `T` 的（注意 `reverse<T>` 里的类型参数），并且返回了一个类型为 `T`（注意 `: T[]`）的数组。因为 `reverse` 函数返回了跟它拿到的同样类型的东西，TypeScript 知道 `reversed` 变量同样也是类型  `number[]` 并且会给予它类型安全。同样地如果你传一个 `string[]` 的数组给 reverse 函数，返回的结果同样也是一个 `string[]` 的数组，并且你得到了同样的类型安全，如下所示：
 
 ```ts
 var strArr = ['1', '2'];
@@ -178,7 +179,7 @@ var reversedStrs = reverse(strArr);
 reversedStrs = [1, 2]; // Error!
 ```
 
-In fact JavaScript arrays already have a `.reverse` function and TypeScript does indeed use generics to define its structure:
+实际上 JavaScript 数组已经有一个 `.reverse` 函数，TypeScript 的确使用了泛型来定义它的结构：
 
 ```ts
 interface Array<T> {
@@ -187,7 +188,7 @@ interface Array<T> {
 }
 ```
 
-This means that you get type safety when calling `.reverse` on any array as shown below:
+这意味着你在调用 `.reverse` 于任何数组时都能得到类型安全，如下所示：
 
 ```ts
 var numArr = [1, 2];
@@ -195,10 +196,10 @@ var reversedNums = numArr.reverse();
 
 reversedNums = ['1', '2']; // Error!
 ```
-We will discuss more about the `Array<T>` interface later when we present `lib.d.ts` in the section **Ambient Declarations**.
+我们稍后在 **Ambient Declarations** 这章展示 `lib.d.ts` 的时候会讨论更多关于 `Array<T>` 的话题。
 
-## Union Type
-Quite commonly in JavaScript you want to allow a property to be one of multiple types e.g *a `string` or a `number`*. This is where the *union type* (denoted by `|` in a type annotation e.g. `string|number`) comes in handy. A common use case is a function that can take a single object or an array of the object e.g.
+## 并类型
+在 JavaScript 中很普遍的状况是，你想要允许一个属性是多个类型如*`string ` 或者 `number`*中的一个。在这里*并类型*（在类型注解中用 `|` 标记，例如 `string|number`）就派上用场了。一个普遍的用例是，能够拿一个单独的对象或者一个对象数组的函数，例如：
 
 ```ts
 function formatCommandline(command: string[]|string) {
@@ -209,12 +210,12 @@ function formatCommandline(command: string[]|string) {
         line = command.join(' ').trim();
     }
 
-    // Do stuff with line:string
+    // 用 line:string 做些事
 }
 ```
 
-## Intersection Type
-`extend` is a very common pattern in JavaScript where you take two objects and create a new one that has the features of both these objects. An **Intersection Type** allows you to use this pattern in a safe way as demonstrated below:
+## 交类型
+`extend` 是一种 JavaScript 中的常见模式，用于你拿到两个对象，然后创建一个新的同时拥有这两个对象特性的对象。**交类型**允许你以安全的方式去使用这个模式，如下所示：
 
 ```ts
 function extend<T, U>(first: T, second: U): T & U {
@@ -232,13 +233,13 @@ function extend<T, U>(first: T, second: U): T & U {
 
 var x = extend({ a: "hello" }, { b: 42 });
 
-// x now has both `a` and `b`
+// x 现在同时有 `a` 和 `b`
 var a = x.a;
 var b = x.b;
 ```
 
-## Tuple Type
-JavaScript doesn't have first class tuple support. People generally just use an array as a tuple. This is exactly what the TypeScript type system supports. Tuples can be annotated using `:[typeofmember1, typeofmember2]` etc. A tuple can have any number of members. Tuples are demonstrated in the below example:
+## 元组类型
+JavaScript 没有一等元组支持。人们通常使用数组当作元组。这正是 TypeScript 类型系统所支持的。元组可以使用 `:[typeofmember1, typeofmember2]` 等来标注。一个元祖可以有任意数量的成员。元组的示例如下：
 
 ```ts
 var nameNumber: [string, number];
@@ -250,7 +251,7 @@ nameNumber = ['Jenny', 8675309];
 nameNumber = ['Jenny', '867-5309'];
 ```
 
-Combine this with the destructuring support in TypeScript, tuples feel fairly first class despite being arrays underneath.
+将这与 TypeScript 中的解构支持合并起来，元组看起来就是一等的了，尽管底层是使用数组实现的。
 
 ```ts
 var nameNumber: [string, number];
@@ -259,22 +260,22 @@ nameNumber = ['Jenny', 8675309];
 var [name, num] = nameNumber;
 ```
 
-## Type Alias
-TypeScript provides convenient syntax for providing names for type annotations that you would like to use in more than one place. The aliases are created using the `type SomeName = someValidTypeAnnotation` syntax. An example is demonstrated below:
+## 类型别名
+TypeScript 提供了方便的语法来为你将会不只一次使用的类型注解提供名字。别名是使用 `type SomeName = someValidTypeAnnotation` 语法创建的。例子如下所示：
 
 ```ts
 type StrOrNum = string|number;
 
-// Usage: just like any other notation
+// 使用方法：就像其他类型那样
 var sample: StrOrNum;
 sample = 123;
 sample = '123';
 
-// Just checking
+// 检查
 sample = true; // Error!
 ```
 
-Unlike an `interface` you can give a type alias to literally any type annotation (useful for stuff like union and intersection types). Here are a few more examples to make you familiar with the syntax:
+不像 `interface`，你可以给一个类型以字面意义上的任何类型注解（对于像是并和交类型的东西特别有用）。这里是一些例子使你更熟悉它的语法：
 
 ```ts
 type Text = string | { text: string };
@@ -282,7 +283,7 @@ type Coordinates = [number, number];
 type Callback = (data: string) => void;
 ```
 
-> TIP: If you need to have deep hierarchies of Type annotations use an `interface`. Use a type alias for simpler object structures (like `Coordinates`) just to give them a semantic name.
+> 提示：如果你需要有深层的类型注解，使用 `interface`。为简单的对象结构（例如 `Coordinates`）使用类型别名只是为了给他们一个语义的名字。
 
-## Summary
-Now that you can start annotating most of your JavaScript code we can jump into the nitty gritty details of all the power available in the TypeScript's Type System.
+## 总结
+现在你可以开始标注你的大部分 JavaScript 代码，我们可以跳到 TypeScript 类型系统中所有能力的深度细节了。

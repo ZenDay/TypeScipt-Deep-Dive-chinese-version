@@ -35,7 +35,7 @@
   * [命名空间](docs/project/namespaces.md)
 * [NodeJS 快速开始](docs/quick/nodejs.md)
 * [浏览器端快速开始](docs/quick/browser.md)
-* [TypeScript's Type System](docs/types/type-system.md)
+* [TypeScript 类型系统](docs/types/type-system.md)
   * [JS Migration Guide](docs/types/migrating.md)
   * [Ambient Declarations](docs/types/ambient/intro.md)
     * [Declaration Files](docs/types/ambient/d.ts.md)
