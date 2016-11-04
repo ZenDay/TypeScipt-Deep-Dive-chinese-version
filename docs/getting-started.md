@@ -6,7 +6,7 @@
 TypeScript 会被编译成 JavaScript。JavaScipt 是你实际要执行的代码（在浏览器或者服务器上）。所以你需要下面的这些东西：
 
 * TypeScript 编译器（开源可用：[源代码](https://github.com/Microsoft/TypeScript/) 以及 [NPM](https://www.npmjs.com/package/typescript)）
-* 一个 TypeScript 编辑器（如果你喜欢你也可以用 notepad 但是我使用 [alm 🌹](http://alm.tools)）
+* 一个 TypeScript 编辑器（你可以根据喜好用 notepad，但是我推荐使用 [alm 🌹](http://alm.tools)。另外[很多其他编辑器也提供支持](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support)）
 
 
 ![](https://raw.githubusercontent.com/alm-tools/alm-tools.github.io/master/screens/main.png)
@@ -31,13 +31,6 @@ npm install -g typescript@next
 {
   "typescript.tsdk": "./node_modules/typescript/lib"
 }
-```
-
-## TypeScript 定义
-TypeScript 有一个外部 JavaScript 代码库*声明文件*的概念。将近 90% 的优秀 JavaScript 库都会使用在一个名叫 [DefinitelyTyped](http://definitelytyped.org/) 的项目中的*高质量*文件。你需要 `typings` 来获取这些定义。别担心，之后我们会解释这意味着什么…现在只需要安装：
-
-```
-npm install -g typings
 ```
 
 ## 获取源代码

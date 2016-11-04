@@ -81,13 +81,16 @@ console.log(Something.instances); // 2
 ### 访问修饰符
 TypeScript 支持访问修饰符 `public`、`private` 和 `protected`，它们决定了一个 `class` 成员的可访问性，如下所示：
 
-| 可访问在 | `public` | `private` | `protected` |
-|---------|----------|-----------|-------------|
-| 类的实例 | 是		 | 否        | 否		       |
-| 类	   | 是		 | 是        | 是		       |
-| 类的孩子 | 是		 | 否        | 是		       |
+| 可访问在 | `public` | `protected` | `private` |
+|---------|----------|-------------|-----------|
+| 类      | 是		 | 是          | 是	       |
+| 类的孩子 | 是		 | 是          | 否         |
+| 类的实例 | 是		 | 否          | 否	       |
 
-Note that at runtime (in the generated JS) these have no significance but will give you compile time errors if you use them incorrectly. An example of each is shown below:需要注意的是在运行时（在生成的 JS 里）这些是没有意义的，但是如果你不正确使用它们，会出现编译时错误。对于每种情况的
+
+如果访问修饰符没有被指定，那么它就为 `public`，以最接近于 JavaScript 的原生意义 🌹。
+
+需要注意的是在运行时（在生成的 JS 里）这些是没有意义的，但是如果你不正确使用它们，会出现编译时错误。对于每种情况，如下所示：
 
 ```ts
 class FooBase {
@@ -127,7 +130,7 @@ class FooChild extends FooBase {
 
 ```ts
 class Foo {}
-let foo = new Foo();
+var foo = new Foo();
 ```
 
 ### 使用构造函数来定义

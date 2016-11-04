@@ -34,6 +34,6 @@ var bar = foo; // ERROR: "cannot find name 'foo'"
 import {foo} from "./foo";
 var bar = foo; // 允许
 ```
-在 `bar.ts` 中使用一个 `import` 不仅允许你从其他文件中带来东西，还把文件 `bar.ts` 标记为一个*模块*，因此 `bar.ts` 不会污染全局命名空间。
+在 `bar.ts` 中使用一个 `import` 不仅允许你从其他文件中带来东西，还把文件 `foo.ts` 标记为一个*模块*，因此 `foo.ts` 不会污染全局命名空间。
 
 使用了外部模块的给定 TypeScript 文件生成的 JavaScript 取决于编译器标识 `module`。

@@ -37,6 +37,7 @@
 * [浏览器端快速开始](docs/quick/browser.md)
 * [TypeScript 类型系统](docs/types/type-system.md)
   * [JS Migration Guide](docs/types/migrating.md)
+  * [@types](docs/types/@types.md)
   * [Ambient Declarations](docs/types/ambient/intro.md)
     * [Declaration Files](docs/types/ambient/d.ts.md)
     * [Variables](docs/types/ambient/variables.md)
@@ -52,3 +53,4 @@
   * [Type Compatibility](docs/types/type-compatibility.md)
   * [Never Type](docs/types/never.md)
   * [Discriminated Unions](docs/types/discriminated-unions.md)
+  * [Index Signatures](docs/types/index-signatures.md)

@@ -16,7 +16,7 @@
 ```json
 {
     "include":[
-        "./folder/**/*"
+        "./folder"
     ],
     "exclude":[
         "./folder/**/*.spec.ts",
@@ -29,3 +29,4 @@
 
 * 如果 `files` 被指定了，那么其他的选项会被忽略
 * `**/*` 表示所有文件夹和所有文件（`.ts`/`.tsx` 扩展名会被包括进去，如果 `allowJs` 是 true 的话，`.js`/`.jsx` 也会被包括进去）。
+* `**/*` (像这样使用 `somefolder/**/*`) 表示所有文件夹和所有文件（`.ts`/`.tsx` 扩展名会被包括进去，如果 `allowJs` 是 true 的话，`.js`/`.jsx` 也会被包括进去）。

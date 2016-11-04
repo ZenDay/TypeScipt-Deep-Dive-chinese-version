@@ -1,8 +1,22 @@
 # TypeScript 同 NodeJS
 TypeScript 自成立以来就有了对 NodeJS 的*一等*支持。下面是怎么在 TypeScript 中开始一个 NodeJS 项目：
 
-1. 使用设置为 `"commonjs"` 的 `--module` 编译（就像我们在[模块](../project/external-modules.md)中提到的那样）
-2. 添加 `node.d.ts`（`typings install dt~node --global`）到你的[编译上下文中](../project/compilation-context.md)。
+1. 添加 `node.d.ts` (`npm install @types/node --save-dev`) 到你的[编译上下文中](../project/compilation-context.md)。
+2. 把 `--module` 设为 `"commonjs"` 进行编译。
+3. 通过简单地在你的 tsconfig 添加 node 作为 `types`  来加到全局解决方案里面。
+
+所以你的 tsconfig 会看起来像这样：
+
+```json
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "types": [
+            "node"
+        ]
+    }
+}
+```
 
 现在你可以伴随着 TypeScript 的安全性和开发工程性使用所有 node 模块（例如 `import fs = require('fs')`）！
 

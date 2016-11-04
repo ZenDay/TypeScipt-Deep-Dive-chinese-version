@@ -59,7 +59,7 @@ var Tristate;
 })(Tristate || (Tristate = {}));
 ```
 
-让我们关注这行 `Tristate[Tristate["False"] = 0] = "False";`。 其中`Tristate["False"] = 0` 应该自我解释，即设置 `Tristate` 变量的 `"False"` 成员为 `"0"`。需要注意的是 JavaScript 里赋值操作返回的是被赋的值（在这个例子中是 `0`）。因而被 JavaScript 运行时执行的下一个东西是 `Tristate[0] = "False"`。这意味着你可以使用 `Tristate` 变量来从枚举的字符串版本转换到一个数字或者从数字版本到字符串。如下所示：
+让我们关注这行 `Tristate[Tristate["False"] = 0] = "False";`。 其中`Tristate["False"] = 0` 应该自我解释，即设置 `Tristate` 变量的 `"False"` 成员为 `0`。需要注意的是 JavaScript 里赋值操作返回的是被赋的值（在这个例子中是 `0`）。因而被 JavaScript 运行时执行的下一个东西是 `Tristate[0] = "False"`。这意味着你可以使用 `Tristate` 变量来从枚举的字符串版本转换到一个数字或者从数字版本到字符串。如下所示：
 
 ```ts
 enum Tristate {

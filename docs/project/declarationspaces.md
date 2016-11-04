@@ -95,3 +95,21 @@ declare let _foo: Foo;
 // 跟之前一样
 let bar: typeof _foo.foo;
 ```
+
+### 捕获魔法字符串的类型
+
+很多 JavaScript 库和框架取代了原生 JavaScript 的字符串。你可以使用 `const` 变量来捕获它们的类型。如：
+
+```ts
+// 捕获魔法字符串的*类型*和*值*：
+const foo = "Hello World";
+
+// 使用捕获的类型
+let bar: typeof foo;
+
+// bar 只能被赋值为 `Hello World`
+bar = "Hello World"; // Okay!
+bar = "anything else "; // Error!
+```
+
+在这个例子中  `bar` 拥有文本类型 `"Hello World"`。我们会在文本类型的章节中详细讲述。
