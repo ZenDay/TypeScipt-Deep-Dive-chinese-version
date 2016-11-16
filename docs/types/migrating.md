@@ -1,19 +1,19 @@
-## Migrating From JavaScript
+## 从 JavaScript 迁移
 
-In general the process consists of the following steps:
+通常来说这个过程包括了以下步骤：
 
-* Add a `tsconfig.json`
-* Change your source code file extensions from `.js` to `.ts`. Start *suppressing* errors using `any`.
-* Write new code in TypeScript and make as little use of `any` as possible.
-* Go back to the old code and start adding type annotations and fix identified bugs.
-* Use ambient definitions for third party JavaScript code.
+* 添加 `tsconfig.json`
+* 将你的源代码文件扩展名从 `.js` 改成 `.ts`。使用 `any` 来开始*抑止*错误。
+* 使用 TypeScript 来编写新的代码并且尽可能少地使用 `any`。
+* 返回到旧代码里并且开始加入类型标注和解决发现的 bugs。
+* 为第三方 JavaScript 代码使用环境定义。
 
-Let us discuss a few of these points further.
+让我们来深入讨论这几个点。
 
-Note that all JavaScript is *valid* TypeScript. That is to say that if you give the TypeScript compiler some JavaScript -> the JavaScript emitted by the TypeScript compiler will behave exactly the same as the original JavaScript. This means that changing the extension from `.js` to `.ts` will not adversely affect your codebase.
+注意所有 JavaScript 都是*有效的* TypeScript。那就是说，如果你给予 TypeScript 编译器一些 JavaScript -> 被 TypeScript  编译器释放的 JavaScript 会跟原始 JavaScript 表现地完全相同。这意味着改变 `.js` 扩展名为 `.ts` 将不会对你的代码库造成不良影响。
 
-### Suppressing Errors
-TypeScript will immediately start TypeChecking your code, and your original JavaScript code *might not be as neat as you thought it was* and hence you get diagnostic errors. Many of these errors you can suppress with using `any` e.g.
+### 抑止错误
+TypeScript 会马上开始对你的代码进行类型检查，并且你的原始 JavaScript 代码*可能不像你想象中的那么整洁*，因此你会得到诊断错误。对于其中的大部分错误你可以使用 `any` 来抑止，例如：
 
 ```ts
 var foo = 123;
@@ -22,7 +22,7 @@ var bar = 'hey';
 bar = foo; // ERROR: cannot assign a number to a string
 ```
 
-Even though the **error is valid** (and in most cases the inferred information will be better than what the original authors of different portions of the code bases imagined), your focus will probably be writing new code in TypeScript while progressively updating the old code base. Here you can suppress this error with a type assertion as shown below:
+即使**错误是合法的**（而且在大部分情况下推论信息会比代码库不同部分的原作者所想象的更好），你的关注点可能会在用 TypeScript 编写新代码的同时渐进地更新旧代码库。这里你可以使用类型断言来抑止错误，如下所示：
 
 ```ts
 var foo = 123;
@@ -31,7 +31,7 @@ var bar = 'hey';
 bar = foo as any; // Okay!
 ```
 
-In other places you might want to annotate something as `any` e.g.
+在其他地方你可能想要标注某些东西为 `any`，例如：
 
 ```ts
 function foo() {
@@ -41,62 +41,63 @@ var bar = 'hey';
 bar = foo(); // ERROR: cannot assign a number to a string
 ```
 
-Suppressed:
+抑止：
 
 ```ts
-function foo(): any { // Added `any`
+function foo(): any { // 添加 `any`
     return 1;
 }
 var bar = 'hey';
 bar = foo(); // Okay!
 ```
 
-> Note: Suppressing errors is dangerous, but it allows you to take notice of errors in your *new* TypeScript code. You might want to leave `// TODO:` comments as you go along.**
+> 注意：抑止错误是危险的，但是它使你更注意*新* TypeScript 代码中的错误。你可以在你继续下去的时候留下 `// TODO:` 注释。
 
-### Third Party JavaScript
-You can change your JavaScript to TypeScript, but you can't change the whole world to use TypeScript. This is where TypeScript's ambient definition support comes in. In the beginning we recommend you create a `vendor.d.ts` (the `.d.ts` extension specifies the fact that this is a *declaration file*) and start adding dirty stuff to it. Alternatively create a file specific for the library e.g. `jquery.d.ts` for jquery.
+### 第三方 JavaScript
+你可以把你的 JavaScript 改变成 TypeScript，但是你不能让整个世界都使用 TypeScript。这就是 TypeScript 的环境定义出场的时候。一开始我们推荐你创建 `vendor.d.ts`（`.d.ts` 扩展名说明这是一个*声明文件*）并且开始在里面添加一些肮脏的东西。或者为特定库创建特定的文件，例如 `jquery.d.ts` 对应 jquery。
 
-> Note : Well maintained and strongly typed definitions for nearly the top 90% JavaScript libraries out there exists in an OSS Repository called [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped). We recommend looking there before creating your own definitions as we present here. Nevertheless this quick and dirty way is vital knowledge to decrease your initial friction with TypeScript**.
+> 注意：90% 的 JavaScript 库都有被良好地维护着的类型定义存在于一个叫做 [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) 的 OSS 仓库中。我们推荐在像我们介绍的那样创建你自己的定义之前先在那里寻找。尽管如此，这个快速而邋遢的方法对于减少你在 TypeScript 上的初始冲突上至关重要。
 
-Consider the case of `jquery`, you can create a *trivial* definition for it quite easily:
+考虑 `jquery` 的例子，你可以简单地为它创建一个*微小的*定义：
 
 ```ts
 declare var $: any;
 ```
 
-Sometimes you might want to add an explicit annotation on something (e.g. `JQuery`) and you need something in *type declaration space*. You can do that quite easily using the `type` keyword:
+有的时候你可能想要在某些东西上添加清晰的的标注（如 `JQuery`）并且你需要*类型声明空间*中的某些东西。你可以很简单地使用 `type` 关键字来做到：
 
 ```ts
 declare type JQuery = any;
 declare var $: JQuery;
 ```
 
-This provides you an easier future update path.
+这为你提供了更轻松的未来更新道路。
 
-Again, a high quality `jquery.d.ts` exists at [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped). But you now know how to overcome any JavaScript -> TypeScript friction *quickly* when using third party JavaScript. We will look at ambient declarations in detail next.
+再次强调，一个高质量的 `jquery.d.ts` 存在于 [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) 中。但是你现在知道如何*快速地*解决任何 JavaScript -> TypeScript 冲突，当在使用第三方 JavaScript 的时候。我们接下来会看到环境定义的细节。
 
 
-# Third Party NPM modules
+# 第三方 NPM 模块
 
-Similar to global variable declaration you can declare a global module quite easily. E.g. for `jquery` if you want to use it as a module (https://www.npmjs.com/package/jquery) you can write the following yourself: 
+类似于全局变量声明，你可以很轻松地声明一个全局模块。例如对于 `jquery`，如果你想要把它当成模块（https://www.npmjs.com/package/jquery）来使用，你可以这样写：
 
 ```ts
 declare module "jquery";
 ```
 
-And then you can import it in your file as needed: 
+然后你就可以在需要的时候引入它：
 
 ```ts
 import * as $ from "jquery";
 ```
 
-> Again, a high quality `jquery.d.ts` exists at [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) that provides a much higher quality jquery module declaration. But it might exist for your library, so now you have a quick low friction way of continuing the migration 🌹
+> 再次强调，一个高质量的 `jquery.d.ts` 存在于 [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) 中，它提供了一个更高质量的 jquery 模块声明。但是对于你的库，它可能存在，因此现在你有了一个快速而低阻力的方式来继续迁移 🌹
 
-# External non js resources
+# 外部非 js 资源
 
-You can even allow import of any file e.g. `.css` files (if you are using something like webpack) with a simple `*` style declaration: 
+你甚至可以引入任意文件，例如 `.css` 文件（如果你正在使用像是 webpack 这样的东西），通过一个简单的 `*` 风格声明：
+
 ```ts
 declare module "*.css";
 ```
 
-Now people can `import * as foo from "./some/file.css";`
+现在人们可以 `import * as foo from "./some/file.css";`

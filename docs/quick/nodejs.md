@@ -1,25 +1,32 @@
 # TypeScript 同 NodeJS
-TypeScript 自成立以来就有了对 NodeJS 的*一等*支持。下面是怎么在 TypeScript 中开始一个 NodeJS 项目：
+TypeScript 自成立以来就有了对 NodeJS 的*一等*支持。下面是如何快速开始一个 NodeJS 项目：
 
-1. 添加 `node.d.ts` (`npm install @types/node --save-dev`) 到你的[编译上下文中](../project/compilation-context.md)。
-2. 把 `--module` 设为 `"commonjs"` 进行编译。
-3. 通过简单地在你的 tsconfig 添加 node 作为 `types`  来加到全局解决方案里面。
+> 注意：这里的很多步骤实际上只是普通地练习 nodejs 开始步骤
 
-所以你的 tsconfig 会看起来像这样：
+1. 开始一个 nodejs 项目 `package.json`。快速的方法：`npm init -y`
+2. 添加 TypeScript（`npm install typescript --save-dev`）
+3. 添加 `node.d.ts` (`npm install @types/node --save-dev`)
+4. 为 TypeScript 选项初始化一个 `tsconfig.json`（`node ./node_modules/.bin/tsc --init`）
+
+就是这样！启动你的 IDE（例如 `alm -o`）然后玩耍起来。现在你可以使用所有以 node 模块构建的东西（例 `import fs = require('fs')`），并且享受 TypeScript 的安全性和开发者人体工程学。
+
+## 另外：即时编译 + 运行
+* 添加 `ts-node`，我们将会使用它来在 node 中进行即时编译 + 运行（`npm install ts-node --save-dev`）
+* 添加 `nodemon`，它会在一个文件改变的时候调用 `ts-node`（`npm install nodemon --save-dev`）
+
+现在只需要在你的 `package.json` 中基于你的应用入口如 `index.ts` 添加一个 `script` 目标即可：
 
 ```json
-{
-    "compilerOptions": {
-        "module": "commonjs",
-        "types": [
-            "node"
-        ]
-    }
-}
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts"
+  },
 ```
+所以现在你可以运行`npm start` 并且当你编辑 `index.ts` 时：
 
-现在你可以伴随着 TypeScript 的安全性和开发工程性使用所有 node 模块（例如 `import fs = require('fs')`）！
-
+* nodemon 重新运行它的命令（ts-node）
+* ts-node 自动获取 tsconfig.json 和当前安装的 typescript 版本转换编译
+* ts-node 通过 node 运行输出的 javascript。
 
 ## 创建 TypeScript node 模块
 

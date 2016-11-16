@@ -111,6 +111,7 @@ something.each(function() {
 
 ```ts
 class Adder {
+    constructor(public a: number) {}
     // This function is now safe to pass around
     add = (b: string): string => {
         return this.a + b;
