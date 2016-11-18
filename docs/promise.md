@@ -281,7 +281,7 @@ Promise.resolve(123)
 
 
 ### TypeScript 和 promise
-TypeScript 的伟大之处在于它知道 promise 链抛出来的值流。
+TypeScript 的伟大之处在于它可以通过  promise 链获取值流。
 
 ```ts
 Promise.resolve(123)
